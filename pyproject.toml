@@ -1,0 +1,19 @@
+[project]
+name = "cho-cbc-management"
+version = "0.1.0"
+description = "Python scripts for CHO-CBC management"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+cho-cbc-management = "cho_cbc_management:main"
+
+[build-system]
+requires = ["uv_build>=0.13.7,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest==9.2.0",
+    "pytest-cov==7.1.0",
+]
