@@ -36,7 +36,22 @@ participants in Bcc. Templates can specify `cc` and `bcc` as an email address,
 recipient group, or list of these. Supported groups are `sector captains`,
 `route leaders`, `route participants`, `additional participants`, and
 `everyone`. Addresses are deduplicated across To, Cc, and Bcc. No emails are
-sent. The script
+sent. To include past participants from an Audubon CSV export, download it from
+[Audubon circle management](https://cbc.audubon.org/manage/en/circles), place it
+in `src/cho_cbc_management/data`, and pass `--participants FILENAME.csv`.
+For example:
+
+```sh
+uv run generate-confirmation-emails --email "Participant Announcement" --routes 2026_routes.json --participants participants-2026-VACA.csv
+```
+
+The export contains personal information and should be kept private.
+The CSV is used only for `everyone`. Matching full names use JSON addresses in
+preference to CSV addresses; a unique CSV address fills a missing JSON address
+and is logged. Matching ignores case and extra whitespace, but does not guess
+at partial names. When a name has multiple conflicting addresses, the script
+logs a warning and retains the ambiguous addresses for review in the draft.
+The script
 replaces `{date}` in the message with the JSON `count date`, formatted with its
 weekday. The date must be the last Saturday before Christmas Eve of the current
 year; common formats such as `2026-12-19` and `December 19, 2026` are accepted.

@@ -1,4 +1,6 @@
+import csv
 import json
+import logging
 import ssl
 import sys
 from datetime import date
@@ -324,6 +326,205 @@ def test_unsupported_copy_recipient_is_rejected(data):
     data["emails"][1]["bcc"] = "unknown group"
     with pytest.raises(ValueError, match="Unsupported Bcc recipient"):
         build_messages(data, "Route Confirmation")
+
+
+def test_everyone_merges_audubon_csv_with_json_precedence(
+    data, tmp_path, caplog
+):
+    data["routes"][0]["participants"].append(
+        {"name": "  Missing   Person ", "email": ""}
+    )
+    csv_path = tmp_path / "participants.csv"
+    with csv_path.open("w", encoding="utf-8-sig", newline="") as csv_file:
+        writer = csv.DictWriter(
+            csv_file, fieldnames=["First Name", "Last Name", "Email"]
+        )
+        writer.writeheader()
+        writer.writerows(
+            [
+                {
+                    "First Name": " CAPTAIN ",
+                    "Last Name": "one",
+                    "Email": "old@example.com",
+                },
+                {
+                    "First Name": "Missing",
+                    "Last Name": "Person",
+                    "Email": "found@example.com",
+                },
+                {
+                    "First Name": "New",
+                    "Last Name": "Person",
+                    "Email": "new@example.com",
+                },
+                {
+                    "First Name": "",
+                    "Last Name": "",
+                    "Email": "unnamed@example.com",
+                },
+                {"First Name": "No", "Last Name": "Email", "Email": ""},
+                {
+                    "First Name": "New",
+                    "Last Name": "Person",
+                    "Email": "NEW@example.com",
+                },
+            ]
+        )
+    with caplog.at_level(logging.INFO):
+        _, messages = build_messages(
+            data, "Participant Announcement", participants_csv=csv_path
+        )
+    addresses = [
+        address.casefold()
+        for _, address in getaddresses(messages[0].get_all("Bcc", []))
+    ]
+    assert {
+        "captain@example.com",
+        "found@example.com",
+        "new@example.com",
+        "unnamed@example.com",
+    } <= set(addresses)
+    assert "old@example.com" not in addresses
+    assert len(addresses) == len(set(addresses))
+    assert (
+        "Using Audubon CSV email for Missing   Person (missing from JSON)"
+        in caplog.text
+    )
+    assert data["routes"][0]["participants"][-1]["email"] == ""
+
+
+def test_ambiguous_csv_addresses_are_not_assigned_to_json_name(
+    data, tmp_path, caplog
+):
+    data["additional participants"].append({"name": "Shared Name", "email": ""})
+    csv_path = tmp_path / "participants.csv"
+    csv_path.write_text(
+        "First Name,Last Name,Email\nShared,Name,first@example.com\nShared,Name,second@example.com\n",
+        encoding="utf-8",
+    )
+    _, messages = build_messages(
+        data, "Participant Announcement", participants_csv=csv_path
+    )
+    addresses = {
+        address.casefold()
+        for _, address in getaddresses(messages[0].get_all("Bcc", []))
+    }
+    assert {"first@example.com", "second@example.com"} <= addresses
+    assert "Multiple Audubon CSV emails match Shared Name" in caplog.text
+    assert "Using Audubon CSV email for Shared Name" not in caplog.text
+
+
+def test_csv_is_used_only_for_everyone_and_validates_columns(data, tmp_path):
+    csv_path = tmp_path / "participants.csv"
+    csv_path.write_text(
+        "Name,Email\nExample,person@example.com\n", encoding="utf-8"
+    )
+    _, messages = build_messages(
+        data, "Captain Announcement", participants_csv=csv_path
+    )
+    assert len(messages) == 1
+    with pytest.raises(ValueError, match="First Name, Last Name, and Email"):
+        build_messages(
+            data, "Participant Announcement", participants_csv=csv_path
+        )
+
+
+def test_incomplete_and_ambiguous_names_do_not_discard_csv_addresses(
+    data, tmp_path, caplog
+):
+    data["additional participants"].extend(
+        [
+            {"name": "Two Words", "email": "json@example.com"},
+            {"name": "Shared Person", "email": "first-json@example.com"},
+            {"name": "Shared Person", "email": "second-json@example.com"},
+        ]
+    )
+    csv_path = tmp_path / "participants.csv"
+    csv_path.write_text(
+        "First Name,Last Name,Email\n,Two Words,incomplete@example.com\nShared,Person,csv@example.com\n",
+        encoding="utf-8",
+    )
+    _, messages = build_messages(
+        data, "Participant Announcement", participants_csv=csv_path
+    )
+    addresses = {
+        address.casefold()
+        for _, address in getaddresses(messages[0].get_all("Bcc", []))
+    }
+    assert {
+        "json@example.com",
+        "incomplete@example.com",
+        "first-json@example.com",
+        "second-json@example.com",
+        "csv@example.com",
+    } <= addresses
+    assert "Multiple JSON emails match Shared Person" in caplog.text
+
+
+def test_cli_participant_csv_parameter(data, tmp_path, caplog):
+    data["additional participants"].append({"name": "New Person", "email": ""})
+    (tmp_path / "routes.json").write_text(json.dumps(data), encoding="utf-8")
+    (tmp_path / "participants.csv").write_text(
+        "First Name,Last Name,Email\nNew,Person,new@example.com\n",
+        encoding="utf-8",
+    )
+    with (
+        caplog.at_level(logging.INFO),
+        patch(
+            "cho_cbc_management.generate_confirmation_emails.DATA_DIR", tmp_path
+        ),
+        patch.object(
+            sys,
+            "argv",
+            [
+                "drafts",
+                "--email",
+                "Participant Announcement",
+                "--routes",
+                "routes.json",
+                "--participants",
+                "participants.csv",
+            ],
+        ),
+        patch(
+            "cho_cbc_management.generate_confirmation_emails.create_drafts"
+        ) as create,
+    ):
+        main()
+    draft = create.call_args.args[1][0]
+    assert "new@example.com" in draft["Bcc"]
+    assert "Using Audubon CSV email for New Person" in caplog.text
+
+
+def test_real_audubon_csv_prefers_json_address():
+    data = json.loads(
+        (DATA_DIR / "2026_routes.json").read_text(encoding="utf-8")
+    )
+    csv_path = DATA_DIR / "participants-2026-VACA.csv"
+    if not csv_path.is_file():
+        pytest.skip("Audubon participant export is not present")
+    with csv_path.open(encoding="utf-8-sig", newline="") as csv_file:
+        participant = next(
+            row
+            for row in csv.DictReader(csv_file)
+            if row["First Name"].casefold() == "allen"
+            and row["Last Name"].casefold() == "hale"
+        )
+    captain = next(
+        person
+        for sector in data["sector captains"]
+        for person in sector["names"]
+        if person.get("name", "").strip().casefold() == "allen hale"
+    )
+    _, messages = build_messages(
+        data, "Participant Announcement", participants_csv=csv_path
+    )
+    addresses = {
+        address.casefold()
+        for _, address in getaddresses(messages[0].get_all("Bcc", []))
+    }
+    assert captain["email"].strip().casefold() in addresses
+    assert participant["Email"].strip().casefold() not in addresses
 
 
 def test_real_announcement_recipients():

@@ -1,4 +1,5 @@
 import argparse
+import csv
 import imaplib
 import json
 import logging
@@ -104,7 +105,106 @@ def recipient_list(people, label):
     return list(recipients.values())
 
 
-def template_recipients(data, selection, label):
+def load_audubon_participants(path):
+    with path.open(encoding="utf-8-sig", newline="") as csv_file:
+        reader = csv.DictReader(csv_file)
+        required = {"First Name", "Last Name", "Email"}
+        if not required.issubset(reader.fieldnames or []):
+            raise ValueError(
+                "Participant CSV must contain First Name, Last Name, and Email columns"
+            )
+        participants = []
+        for row in reader:
+            email = (row.get("Email") or "").strip()
+            if not email:
+                continue
+            first_name = (row.get("First Name") or "").strip()
+            last_name = (row.get("Last Name") or "").strip()
+            participants.append(
+                {
+                    "name": " ".join(filter(None, (first_name, last_name))),
+                    "email": email,
+                    "_full_name": bool(first_name and last_name),
+                }
+            )
+        return participants
+
+
+def full_name_key(person):
+    parts = person.get("name", "").split()
+    return (
+        " ".join(parts).casefold()
+        if len(parts) >= 2 and person.get("_full_name", True)
+        else ""
+    )
+
+
+def merge_audubon_participants(people, csv_people):
+    json_by_name = {}
+    for person in people:
+        key = full_name_key(person)
+        if key:
+            json_by_name.setdefault(key, []).append(person)
+    csv_by_name = {}
+    for person in csv_people:
+        key = full_name_key(person)
+        if key:
+            csv_by_name.setdefault(key, {})[person["email"].casefold()] = person
+
+    merged = []
+    logged = set()
+    for person in people:
+        key = full_name_key(person)
+        json_emails = {
+            entry.get("email", "").strip().casefold()
+            for entry in json_by_name.get(key, [])
+            if entry.get("email", "").strip()
+        }
+        matches = csv_by_name.get(key, {})
+        if (
+            key
+            and not person.get("email", "").strip()
+            and not json_emails
+            and len(matches) == 1
+        ):
+            csv_person = next(iter(matches.values()))
+            merged.append({**person, "email": csv_person["email"]})
+            if key not in logged:
+                LOGGER.info(
+                    "Using Audubon CSV email for %s (missing from JSON)",
+                    person["name"].strip(),
+                )
+                logged.add(key)
+        else:
+            merged.append(person)
+
+    for person in csv_people:
+        key = full_name_key(person)
+        matching_json = json_by_name.get(key, [])
+        json_emails = {
+            entry.get("email", "").strip().casefold()
+            for entry in matching_json
+            if entry.get("email", "").strip()
+        }
+        if len(json_emails) == 1:
+            continue
+        if len(json_emails) > 1 and key not in logged:
+            LOGGER.warning(
+                "Multiple JSON emails match %s; retaining the CSV addresses without choosing one",
+                person["name"],
+            )
+            logged.add(key)
+        if matching_json and len(csv_by_name[key]) > 1 and key not in logged:
+            LOGGER.warning(
+                "Multiple Audubon CSV emails match %s; retaining the CSV addresses without choosing one",
+                person["name"],
+            )
+            logged.add(key)
+        merged.append(person)
+    return merged
+
+
+def template_recipients(data, selection, label, everyone=None):
     captains = [
         person
         for sector in data.get("sector captains", [])
@@ -123,7 +223,9 @@ def template_recipients(data, selection, label):
         "route leaders": leaders,
         "route participants": participants,
         "additional participants": additional,
-        "everyone": captains + leaders + participants + additional,
+        "everyone": everyone
+        if everyone is not None
+        else captains + leaders + participants + additional,
     }
     if not selection:
         return []
@@ -141,7 +243,9 @@ def template_recipients(data, selection, label):
     return recipient_list(people, label)
 
 
-def build_messages(data, template_name, compiler_email=None):
+def build_messages(
+    data, template_name, compiler_email=None, participants_csv=None
+):
     count_date = validated_count_date(data)
     rain_date = validated_rain_date(data, count_date)
     templates = [
@@ -154,6 +258,31 @@ def build_messages(data, template_name, compiler_email=None):
             f"Expected exactly one email template named {template_name!r}"
         )
     template = templates[0]
+    selections = [template.get(field) for field in ("to", "cc", "bcc")]
+    uses_everyone = any(
+        isinstance(item, str) and item.strip().casefold() == "everyone"
+        for selection in selections
+        for item in (selection if isinstance(selection, list) else [selection])
+    )
+    everyone = None
+    if participants_csv is not None and uses_everyone:
+        json_people = (
+            [
+                person
+                for sector in data.get("sector captains", [])
+                for person in sector.get("names", [])
+            ]
+            + [
+                person
+                for route in data.get("routes", [])
+                for field in ("leaders", "participants")
+                for person in route.get(field, [])
+            ]
+            + data.get("additional participants", [])
+        )
+        everyone = merge_audubon_participants(
+            json_people, load_audubon_participants(participants_csv)
+        )
     compilers = [
         compiler
         for compiler in data.get("compilers", [])
@@ -193,7 +322,7 @@ def build_messages(data, template_name, compiler_email=None):
         "Participant Announcement",
     )
     if announcement:
-        people = template_recipients(data, template.get("to"), "To")
+        people = template_recipients(data, template.get("to"), "To", everyone)
         groups.append((people, [], None, []))
     elif template.get("to") == "sector captains":
         for sector in sorted(sectors):
@@ -230,8 +359,10 @@ def build_messages(data, template_name, compiler_email=None):
             f"Unsupported template recipient group: {template.get('to')!r}"
         )
 
-    template_cc = template_recipients(data, template.get("cc"), "Cc")
-    template_bcc = template_recipients(data, template.get("bcc"), "Bcc")
+    template_cc = template_recipients(data, template.get("cc"), "Cc", everyone)
+    template_bcc = template_recipients(
+        data, template.get("bcc"), "Bcc", everyone
+    )
     messages = []
     for people, copies, sector, group_routes in groups:
         message = EmailMessage()
@@ -398,9 +529,7 @@ def create_drafts(sender, messages, env_path):
 
 
 def main():
-    logging.basicConfig(
-        level=logging.WARNING, format="%(levelname)s: %(message)s"
-    )
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
     parser = argparse.ArgumentParser(
         description="Create Gmail confirmation drafts without sending them."
     )
@@ -409,6 +538,10 @@ def main():
     )
     parser.add_argument(
         "--routes", required=True, help="JSON filename in the data directory"
+    )
+    parser.add_argument(
+        "--participants",
+        help="Audubon participant CSV filename in the data directory (used for everyone)",
     )
     parser.add_argument(
         "--compiler",
@@ -423,10 +556,20 @@ def main():
     args = parser.parse_args()
     if Path(args.routes).name != args.routes or args.routes in (".", ".."):
         parser.error("--routes must be a filename in the data directory")
+    if args.participants and (
+        Path(args.participants).name != args.participants
+        or args.participants in (".", "..")
+    ):
+        parser.error("--participants must be a filename in the data directory")
     try:
         with (DATA_DIR / args.routes).open(encoding="utf-8") as routes_file:
             data = json.load(routes_file)
-        sender, messages = build_messages(data, args.email, args.compiler)
+        participants_csv = (
+            DATA_DIR / args.participants if args.participants else None
+        )
+        sender, messages = build_messages(
+            data, args.email, args.compiler, participants_csv
+        )
         if not messages:
             print("No recipients with email addresses; no drafts created.")
             return
