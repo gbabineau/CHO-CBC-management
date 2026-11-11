@@ -9,6 +9,7 @@ from datetime import date, datetime, timedelta
 from email import policy
 from email.message import EmailMessage
 from email.utils import formataddr
+from html import escape
 from pathlib import Path
 
 from dateutil import parser as date_parser
@@ -18,7 +19,7 @@ DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 LOGGER = logging.getLogger(__name__)
 
 
-def formatted_count_date(data):
+def validated_count_date(data):
     year = date.today().year
     christmas_eve = date(year, 12, 24)
     days_since_saturday = (christmas_eve.weekday() - 5) % 7 or 7
@@ -37,7 +38,34 @@ def formatted_count_date(data):
     except (ValueError, OverflowError) as error:
         LOGGER.error("Invalid count date %r: %s", raw_date, error)
         raise ValueError(f"Invalid count date: {error}") from error
-    return f"{count_date:%A, %B} {count_date.day}, {count_date.year}"
+    return count_date
+
+
+def format_date(value):
+    return f"{value:%A, %B} {value.day}, {value.year}"
+
+
+def formatted_count_date(data):
+    return format_date(validated_count_date(data))
+
+
+def validated_rain_date(data, count_date):
+    raw_date = data.get("rain date")
+    try:
+        if not isinstance(raw_date, str) or not raw_date.strip():
+            raise ValueError("Missing rain date")
+        rain_date = date_parser.parse(
+            raw_date, default=datetime(count_date.year, 1, 1)
+        ).date()
+        expected = count_date + timedelta(days=1)
+        if rain_date != expected:
+            raise ValueError(
+                f"Rain date must be the day after the count date: {expected.isoformat()}"
+            )
+    except (ValueError, OverflowError) as error:
+        LOGGER.error("Invalid rain date %r: %s", raw_date, error)
+        raise ValueError(f"Invalid rain date: {error}") from error
+    return rain_date
 
 
 def route_sectors(route):
@@ -76,8 +104,46 @@ def recipient_list(people, label):
     return list(recipients.values())
 
 
+def template_recipients(data, selection, label):
+    captains = [
+        person
+        for sector in data.get("sector captains", [])
+        for person in sector.get("names", [])
+    ]
+    routes = data.get("routes", [])
+    leaders = [
+        person for route in routes for person in route.get("leaders", [])
+    ]
+    participants = [
+        person for route in routes for person in route.get("participants", [])
+    ]
+    additional = data.get("additional participants", [])
+    groups = {
+        "sector captains": captains,
+        "route leaders": leaders,
+        "route participants": participants,
+        "additional participants": additional,
+        "everyone": captains + leaders + participants + additional,
+    }
+    if not selection:
+        return []
+    selections = selection if isinstance(selection, list) else [selection]
+    people = []
+    for item in selections:
+        if isinstance(item, dict):
+            people.append(item)
+        elif isinstance(item, str) and item.strip().casefold() in groups:
+            people.extend(groups[item.strip().casefold()])
+        elif isinstance(item, str) and "@" in item:
+            people.append({"email": item.strip()})
+        else:
+            raise ValueError(f"Unsupported {label} recipient: {item!r}")
+    return recipient_list(people, label)
+
+
 def build_messages(data, template_name, compiler_email=None):
-    count_date = formatted_count_date(data)
+    count_date = validated_count_date(data)
+    rain_date = validated_rain_date(data, count_date)
     templates = [
         template
         for template in data.get("emails", [])
@@ -122,7 +188,14 @@ def build_messages(data, template_name, compiler_email=None):
             LOGGER.warning("Sector %s has no captain", sector)
 
     groups = []
-    if template["to"] == "sector captains":
+    announcement = template_name in (
+        "Captain Announcement",
+        "Participant Announcement",
+    )
+    if announcement:
+        people = template_recipients(data, template.get("to"), "To")
+        groups.append((people, [], None, []))
+    elif template.get("to") == "sector captains":
         for sector in sorted(sectors):
             people = recipient_list(
                 captains.get(sector, []), f"Sector {sector} captain"
@@ -137,7 +210,7 @@ def build_messages(data, template_name, compiler_email=None):
             )
             if people:
                 groups.append((people, [], sector, sector_routes))
-    elif template["to"] == "route leaders":
+    elif template.get("to") == "route leaders":
         for route in routes:
             people = recipient_list(
                 route.get("leaders", []), f"Route {route['number']} leader"
@@ -154,42 +227,94 @@ def build_messages(data, template_name, compiler_email=None):
                 groups.append((people, copies, None, [route]))
     else:
         raise ValueError(
-            f"Unsupported template recipient group: {template['to']!r}"
+            f"Unsupported template recipient group: {template.get('to')!r}"
         )
 
+    template_cc = template_recipients(data, template.get("cc"), "Cc")
+    template_bcc = template_recipients(data, template.get("bcc"), "Bcc")
     messages = []
     for people, copies, sector, group_routes in groups:
         message = EmailMessage()
         message["From"] = formataddr((compiler.get("name", "").strip(), sender))
         to_addresses = [person["email"].strip() for person in people]
-        message["To"] = ", ".join(to_addresses)
-        to_keys = {address.casefold() for address in to_addresses}
-        cc_addresses = [
-            person["email"].strip()
-            for person in copies
-            if person["email"].strip().casefold() not in to_keys
-        ]
+        if to_addresses:
+            message["To"] = ", ".join(to_addresses)
+        seen_addresses = {address.casefold() for address in to_addresses}
+        cc_addresses = []
+        for person in copies + template_cc:
+            address = person["email"].strip()
+            if address.casefold() not in seen_addresses:
+                seen_addresses.add(address.casefold())
+                cc_addresses.append(address)
         if cc_addresses:
             message["Cc"] = ", ".join(cc_addresses)
+        bcc_addresses = []
+        for person in template_bcc:
+            address = person["email"].strip()
+            if address.casefold() not in seen_addresses:
+                seen_addresses.add(address.casefold())
+                bcc_addresses.append(address)
+        if bcc_addresses:
+            message["Bcc"] = ", ".join(bcc_addresses)
+        if not (to_addresses or cc_addresses or bcc_addresses):
+            continue
         message["Subject"] = template["subject"]
-        names = [contact_name(person) for person in people]
-        greeting = (
-            names[0]
-            if len(names) == 1
-            else f"{', '.join(names[:-1])} and {names[-1]}"
-        )
-        paragraphs = [f"Dear {greeting},"]
-        if sector is not None:
-            paragraphs.append(
-                f"You are identified as the captain of sector {sector}."
+        paragraphs = []
+        if not announcement:
+            names = [
+                contact_name(person).split(maxsplit=1)[0] for person in people
+            ]
+            greeting = (
+                names[0]
+                if len(names) == 1
+                else f"{', '.join(names[:-1])} and {names[-1]}"
             )
-        paragraphs.extend(template["message"].replace("{date}", count_date).split("\n"))
+            paragraphs.append(f"Dear {greeting},")
+        website = (data.get("website") or "").strip()
+        if sector is not None:
+            sector_line = (
+                f"You are identified as the captain of sector {sector}"
+            )
+            if website:
+                sector_line += f" (Sector map: {website})"
+            paragraphs.append(f"{sector_line}.")
+        paragraphs.extend(
+            re.sub(
+                r"\{\s*rain date\s*\}",
+                format_date(rain_date),
+                template["message"].replace("{date}", format_date(count_date)),
+            ).split("\n")
+        )
         if sector is not None:
             paragraphs.append(f"Sector {sector} routes:")
         paragraphs.extend(
             format_route(route, captains) for route in group_routes
         )
+        paragraphs.append(
+            "\n".join(
+                part
+                for part in (
+                    "Sincerely,",
+                    compiler.get("name", "").strip(),
+                    sender,
+                )
+                if part
+            )
+        )
         message.set_content("\n\n".join(paragraphs))
+        if sector is not None and website:
+            html_paragraphs = [
+                f"<p>{escape(paragraph).replace(chr(10), '<br>')}</p>"
+                for paragraph in paragraphs
+            ]
+            html_paragraphs[1] = (
+                f"<p>You are identified as the captain of sector {escape(str(sector))} "
+                f'(<a href="{escape(website, quote=True)}">Sector map</a>).</p>'
+            )
+            message.add_alternative(
+                "<html><body>" + "\n".join(html_paragraphs) + "</body></html>",
+                subtype="html",
+            )
         messages.append(message)
     return sender, messages
 
@@ -267,7 +392,9 @@ def create_drafts(sender, messages, env_path):
             )
             if status != "OK":
                 raise ValueError(f"Could not create draft for {message['To']}")
-            print(f"Created draft for {message['To']}")
+            print(
+                f"Created draft for {message['To'] or 'undisclosed recipients'}"
+            )
 
 
 def main():

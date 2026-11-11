@@ -20,7 +20,9 @@ from cho_cbc_management.generate_confirmation_emails import (
 
 @pytest.fixture(autouse=True, name="current_year_2026")
 def mock_current_year():
-    with patch("cho_cbc_management.generate_confirmation_emails.date") as mocked_date:
+    with patch(
+        "cho_cbc_management.generate_confirmation_emails.date"
+    ) as mocked_date:
         mocked_date.today.return_value = date(2026, 11, 11)
         mocked_date.side_effect = date
         yield mocked_date
@@ -30,19 +32,32 @@ def mock_current_year():
 def sample_data():
     return {
         "count date": "2026-12-19",
+        "rain date": "2026-12-20",
         "compilers": [{"name": "Compiler", "email": "compiler@example.com"}],
         "emails": [
             {
                 "name": "Sector Confirmation",
                 "to": "sector captains",
                 "subject": "Sectors",
-                "message": "Hello\nCount on {date}",
+                "message": "Hello\nCount on {date}; rain date {rain date}",
             },
             {
                 "name": "Route Confirmation",
                 "to": "route leaders",
                 "subject": "Routes",
-                "message": "Hello\nNext paragraph",
+                "message": "Hello\nNext paragraph\nRain date { rain date}",
+            },
+            {
+                "name": "Captain Announcement",
+                "to": "sector captains",
+                "subject": "Announcement",
+                "message": "Dear Sector Captains,\nCount on {date}",
+            },
+            {
+                "name": "Participant Announcement",
+                "bcc": "everyone",
+                "subject": "Announcement",
+                "message": "Dear Participants,\nRain date {rain date}",
             },
         ],
         "sector captains": [
@@ -68,6 +83,11 @@ def sample_data():
                 "sectors": [1, 2],
                 "description": "First description",
                 "notes": "First notes",
+                "participants": [
+                    {"name": "Participant", "email": "participant@example.com"},
+                    {"email": " CAPTAIN@example.com "},
+                    {"email": ""},
+                ],
                 "leaders": [
                     {"name": "Leader One", "email": "leader@example.com"},
                     {"email": ""},
@@ -85,6 +105,11 @@ def sample_data():
             },
             {"number": 3, "sectors": [3, 2], "leaders": []},
         ],
+        "additional participants": [
+            {"email": " EXTRA@example.com "},
+            {"email": "participant@example.com"},
+            {"email": ""},
+        ],
     }
 
 
@@ -98,7 +123,8 @@ def test_route_drafts_group_leaders_and_copy_captains(data, caplog):
     assert first["From"] == "Compiler <compiler@example.com>"
     assert first["Subject"] == "Routes"
     body = first.get_content()
-    assert body.startswith("Dear Leader One,\n\nHello\n\nNext paragraph")
+    assert body.startswith("Dear Leader,\n\nHello\n\nNext paragraph")
+    assert "Rain date Sunday, December 20, 2026" in body
     assert (
         "Route 1\nDescription: First description\nRoute Leader(s): Leader One (leader@example.com)\nSector Captain(s):"
         in body
@@ -106,10 +132,11 @@ def test_route_drafts_group_leaders_and_copy_captains(data, caplog):
     assert "Sectors: 1 (PRIMARY), 2 (Secondary)" in body
     assert "Notes: First notes" in body
     assert "Route 2 - Second route" not in body
+    assert body.strip().endswith("Sincerely,\nCompiler\ncompiler@example.com")
     assert not list(first.iter_attachments())
     assert messages[1]["To"] == "LEADER@example.com, another@example.com"
     assert messages[1]["Cc"] == "CAPTAIN@example.com, second@example.com"
-    assert "Dear Leader One and Another Leader," in messages[1].get_content()
+    assert "Dear Leader and Another," in messages[1].get_content()
     assert "Route 1" not in messages[1].get_content()
     assert "Route 3 has no leader" in caplog.text
     assert "Sector 3 has no captain" in caplog.text
@@ -123,9 +150,10 @@ def test_sector_drafts_and_invalid_selection(data):
     ]
     body = messages[0].get_content()
     assert "Count on Saturday, December 19, 2026" in body
+    assert "rain date Sunday, December 20, 2026" in body
     assert "{date}" not in body
     assert body.startswith(
-        "Dear Captain One and Leader One,\n\nYou are identified as the captain of sector 1.\n\nHello"
+        "Dear Captain and Leader,\n\nYou are identified as the captain of sector 1.\n\nHello"
     )
     assert (
         "Sector 1 routes:\n\nRoute 1\nDescription: First description\nRoute Leader(s):"
@@ -138,17 +166,69 @@ def test_sector_drafts_and_invalid_selection(data):
     )
     assert "Route Leader(s): Open" in sector_two
     assert "Sector 3: Open" in sector_two
+    assert all(
+        message.get_content()
+        .strip()
+        .endswith("Sincerely,\nCompiler\ncompiler@example.com")
+        for message in messages
+    )
     assert not list(messages[0].iter_attachments())
     assert all(message["Cc"] is None for message in messages)
     with pytest.raises(ValueError, match="template"):
         build_messages(data, "Unknown")
-    data["compilers"].append({"email": "other@example.com"})
+    data["compilers"].append(
+        {"name": "Other Compiler", "email": "other@example.com"}
+    )
     with pytest.raises(ValueError, match="compiler"):
         build_messages(data, "Sector Confirmation")
     assert (
         build_messages(data, "Sector Confirmation", "OTHER@example.com")[0]
         == "other@example.com"
     )
+    _, selected_messages = build_messages(
+        data, "Sector Confirmation", "OTHER@example.com"
+    )
+    assert (
+        selected_messages[0]
+        .get_content()
+        .strip()
+        .endswith("Sincerely,\nOther Compiler\nother@example.com")
+    )
+
+
+def test_sector_map_link_in_html_and_plain_text(data):
+    data["website"] = "https://example.com/map?sector=1&view=routes"
+    data["routes"][0]["description"] = "Woods <fields> & streams"
+    _, messages = build_messages(data, "Sector Confirmation")
+    message = BytesParser(policy=policy.default).parsebytes(
+        messages[0].as_bytes()
+    )
+    plain = message.get_body(preferencelist=("plain",)).get_content()
+    html = message.get_body(preferencelist=("html",)).get_content()
+    assert "Dear Captain and Leader," in plain
+    assert "<p>Dear Captain and Leader,</p>" in html
+    assert (
+        "sector 1 (Sector map: https://example.com/map?sector=1&view=routes)."
+        in plain
+    )
+    assert (
+        'sector 1 (<a href="https://example.com/map?sector=1&amp;view=routes">Sector map</a>).'
+        in html
+    )
+    assert "Description: Woods &lt;fields&gt; &amp; streams" in html
+    assert "Sincerely,<br>Compiler<br>compiler@example.com" in html
+
+    _, route_messages = build_messages(data, "Route Confirmation")
+    assert route_messages[0].get_body(preferencelist=("html",)) is None
+
+
+def test_real_data_sector_map_link():
+    data = json.loads(
+        (DATA_DIR / "2026_routes.json").read_text(encoding="utf-8")
+    )
+    _, messages = build_messages(data, "Sector Confirmation")
+    html = messages[0].get_body(preferencelist=("html",)).get_content()
+    assert f'<a href="{data["website"]}">Sector map</a>' in html
 
 
 def test_missing_email_warns_without_omitting_person_from_route(data, caplog):
@@ -163,6 +243,171 @@ def test_missing_email_warns_without_omitting_person_from_route(data, caplog):
         in messages[0].get_content()
     )
     assert messages[0]["To"] == "leader@example.com"
+
+
+def test_greeting_name_whitespace_and_email_fallback(data):
+    data["routes"][0]["leaders"] = [
+        {"name": "  Anne-Marie O'Connor  ", "email": "anne@example.com"},
+        {"name": "", "email": "other@example.com"},
+    ]
+    _, messages = build_messages(data, "Route Confirmation")
+    body = messages[0].get_content()
+    assert body.startswith("Dear Anne-Marie and other@example.com,")
+    assert "Anne-Marie O'Connor (anne@example.com)" in body
+
+
+def test_announcements_group_recipients_and_preserve_bcc(data):
+    _, captain_messages = build_messages(data, "Captain Announcement")
+    assert len(captain_messages) == 1
+    captain = captain_messages[0]
+    assert (
+        captain["To"]
+        == "captain@example.com, leader@example.com, second@example.com"
+    )
+    assert captain["Cc"] is None and captain["Bcc"] is None
+    assert captain.get_content().startswith(
+        "Dear Sector Captains,\n\nCount on Saturday, December 19, 2026"
+    )
+    assert (
+        captain.get_content()
+        .strip()
+        .endswith("Sincerely,\nCompiler\ncompiler@example.com")
+    )
+
+    _, participant_messages = build_messages(data, "Participant Announcement")
+    assert len(participant_messages) == 1
+    draft = BytesParser(policy=policy.default).parsebytes(
+        participant_messages[0].as_bytes(policy=policy.SMTP)
+    )
+    assert draft["To"] is None and draft["Cc"] is None
+    bcc = [
+        address.casefold()
+        for _, address in getaddresses(draft.get_all("Bcc", []))
+    ]
+    assert bcc == [
+        "captain@example.com",
+        "leader@example.com",
+        "second@example.com",
+        "another@example.com",
+        "participant@example.com",
+        "extra@example.com",
+    ]
+    body = draft.get_content().replace("\r\n", "\n")
+    assert body.startswith(
+        "Dear Participants,\n\nRain date Sunday, December 20, 2026"
+    )
+    assert body.strip().endswith("Sincerely,\nCompiler\ncompiler@example.com")
+
+
+def test_cc_and_bcc_are_supported_on_confirmations(data):
+    template = data["emails"][1]
+    template["cc"] = [
+        "leader@example.com",
+        "extra@example.com",
+        "EXTRA@example.com",
+    ]
+    template["bcc"] = ["everyone", "extra@example.com", "private@example.com"]
+    _, messages = build_messages(data, "Route Confirmation")
+    first = messages[0]
+    assert first["To"] == "leader@example.com"
+    assert (
+        first["Cc"]
+        == "captain@example.com, second@example.com, extra@example.com"
+    )
+    assert (
+        first["Bcc"]
+        == "another@example.com, participant@example.com, private@example.com"
+    )
+
+
+def test_unsupported_copy_recipient_is_rejected(data):
+    data["emails"][1]["bcc"] = "unknown group"
+    with pytest.raises(ValueError, match="Unsupported Bcc recipient"):
+        build_messages(data, "Route Confirmation")
+
+
+def test_real_announcement_recipients():
+    data = json.loads(
+        (DATA_DIR / "2026_routes.json").read_text(encoding="utf-8")
+    )
+    captains = [
+        person
+        for sector in data["sector captains"]
+        for person in sector["names"]
+    ]
+    leaders = [
+        person for route in data["routes"] for person in route["leaders"]
+    ]
+    participants = [
+        person for route in data["routes"] for person in route["participants"]
+    ]
+    everyone = (
+        captains + leaders + participants + data["additional participants"]
+    )
+    expected = {
+        person["email"].strip().casefold()
+        for person in everyone
+        if person.get("email", "").strip()
+    }
+    _, captain_messages = build_messages(data, "Captain Announcement")
+    assert len(captain_messages) == 1
+    actual_captains = {
+        address.casefold()
+        for _, address in getaddresses(captain_messages[0].get_all("To", []))
+    }
+    assert actual_captains == {
+        person["email"].strip().casefold()
+        for person in captains
+        if person.get("email", "").strip()
+    }
+    _, participant_messages = build_messages(data, "Participant Announcement")
+    assert len(participant_messages) == 1
+    bcc = [
+        address.casefold()
+        for _, address in getaddresses(
+            participant_messages[0].get_all("Bcc", [])
+        )
+    ]
+    assert set(bcc) == expected
+    assert len(bcc) == len(expected)
+    assert participant_messages[0]["To"] is None
+
+
+def test_bcc_only_draft_is_saved_without_printing_recipients(
+    data, tmp_path, capsys
+):
+    sender, messages = build_messages(data, "Participant Announcement")
+    env_file = tmp_path / ".env"
+    env_file.write_text(
+        "MAIL_USERNAME=compiler@example.com\nMAIL_PASSWORD=test-password\n",
+        encoding="utf-8",
+    )
+    with (
+        patch(
+            "cho_cbc_management.generate_confirmation_emails.smtplib.SMTP_SSL"
+        ) as smtp_factory,
+        patch(
+            "cho_cbc_management.generate_confirmation_emails.imaplib.IMAP4_SSL"
+        ) as imap_factory,
+    ):
+        mailbox = imap_factory.return_value.__enter__.return_value
+        mailbox.list.return_value = (
+            "OK",
+            [b'(\\HasNoChildren \\Drafts) "/" "[Gmail]/Drafts"'],
+        )
+        mailbox.append.return_value = ("OK", [b"created"])
+        create_drafts(sender, messages, env_file)
+        draft = BytesParser(policy=policy.default).parsebytes(
+            mailbox.append.call_args.args[3]
+        )
+        assert draft["To"] is None
+        assert "participant@example.com" in draft["Bcc"]
+        smtp = smtp_factory.return_value.__enter__.return_value
+        smtp.sendmail.assert_not_called()
+        smtp.send_message.assert_not_called()
+    assert (
+        capsys.readouterr().out == "Created draft for undisclosed recipients\n"
+    )
 
 
 def test_create_drafts_checks_account_and_never_sends(data, tmp_path):
@@ -217,7 +462,7 @@ def test_create_drafts_checks_account_and_never_sends(data, tmp_path):
         assert calls[0].args[:3] == ('"[Gmail]/Drafts"', r"(\Draft)", None)
         draft = BytesParser(policy=policy.default).parsebytes(calls[0].args[3])
         assert draft["To"] == "leader@example.com"
-        assert "Dear Leader One," in draft.get_content()
+        assert "Dear Leader," in draft.get_content()
         grouped_draft = BytesParser(policy=policy.default).parsebytes(
             calls[1].args[3]
         )
@@ -256,7 +501,7 @@ def test_real_data_multi_sector_route_leader():
     leader = next(
         message
         for message in messages
-        if message.get_content().startswith("Dear Jim Childress,")
+        if message.get_content().startswith("Dear Jim,")
     )
     cc = {
         address.casefold()
@@ -265,30 +510,49 @@ def test_real_data_multi_sector_route_leader():
     assert {"jimchildress5@gmail.com", "guy.babineau@gmail.com"} <= cc
     assert "Route 2\nDescription:" in leader.get_content()
     assert "Saturday, December 19, 2026" in leader.get_content()
+    assert "Sunday, December 20, 2026" in leader.get_content()
     assert (
         leader["Subject"]
         == "Charlottesville Christmas Bird Count Route Leaders"
     )
 
 
-@pytest.mark.parametrize("value", ["2026-12-19", "December 19, 2026", "12/19/2026", "19 Dec 2026", "Dec 19"])
+@pytest.mark.parametrize(
+    "value",
+    ["2026-12-19", "December 19, 2026", "12/19/2026", "19 Dec 2026", "Dec 19"],
+)
 def test_count_date_accepts_common_formats(value):
-    assert formatted_count_date({"count date": value}) == "Saturday, December 19, 2026"
+    assert (
+        formatted_count_date({"count date": value})
+        == "Saturday, December 19, 2026"
+    )
 
 
-@pytest.mark.parametrize("value", [None, "", "not a date", "2026-12-12", "2026-12-24", "2025-12-20"])
-def test_invalid_count_date_logs_error_and_stops_before_drafts(data, value, caplog):
+@pytest.mark.parametrize(
+    "value", [None, "", "not a date", "2026-12-12", "2026-12-24", "2025-12-20"]
+)
+def test_invalid_count_date_logs_error_and_stops_before_drafts(
+    data, value, caplog
+):
     data["count date"] = value
-    with patch("cho_cbc_management.generate_confirmation_emails.smtplib.SMTP_SSL") as smtp:
+    with patch(
+        "cho_cbc_management.generate_confirmation_emails.smtplib.SMTP_SSL"
+    ) as smtp:
         with pytest.raises(ValueError, match="Invalid count date"):
             build_messages(data, "Route Confirmation")
         smtp.assert_not_called()
-    assert any(record.levelname == "ERROR" and "Invalid count date" in record.message for record in caplog.records)
+    assert any(
+        record.levelname == "ERROR" and "Invalid count date" in record.message
+        for record in caplog.records
+    )
 
 
 def test_christmas_eve_on_saturday_uses_previous_saturday(current_year_2026):
     current_year_2026.today.return_value = date(2022, 1, 1)
-    assert formatted_count_date({"count date": "December 17, 2022"}) == "Saturday, December 17, 2022"
+    assert (
+        formatted_count_date({"count date": "December 17, 2022"})
+        == "Saturday, December 17, 2022"
+    )
     with pytest.raises(ValueError, match="Invalid count date"):
         formatted_count_date({"count date": "December 24, 2022"})
 
@@ -297,12 +561,76 @@ def test_invalid_date_exits_before_creating_drafts(data, tmp_path, caplog):
     data["count date"] = "2026-12-12"
     (tmp_path / "routes.json").write_text(json.dumps(data), encoding="utf-8")
     with (
-        patch("cho_cbc_management.generate_confirmation_emails.DATA_DIR", tmp_path),
-        patch.object(sys, "argv", ["drafts", "--email", "Route Confirmation", "--routes", "routes.json"]),
-        patch("cho_cbc_management.generate_confirmation_emails.create_drafts") as create,
+        patch(
+            "cho_cbc_management.generate_confirmation_emails.DATA_DIR", tmp_path
+        ),
+        patch.object(
+            sys,
+            "argv",
+            [
+                "drafts",
+                "--email",
+                "Route Confirmation",
+                "--routes",
+                "routes.json",
+            ],
+        ),
+        patch(
+            "cho_cbc_management.generate_confirmation_emails.create_drafts"
+        ) as create,
         pytest.raises(SystemExit) as exit_info,
     ):
         main()
     assert exit_info.value.code == 1
     create.assert_not_called()
-    assert any(record.levelname == "ERROR" and "Invalid count date" in record.message for record in caplog.records)
+    assert any(
+        record.levelname == "ERROR" and "Invalid count date" in record.message
+        for record in caplog.records
+    )
+
+
+@pytest.mark.parametrize(
+    "value",
+    ["2026-12-20", "December 20, 2026", "12/20/2026", "20 Dec 2026", "Dec 20"],
+)
+def test_rain_date_accepts_common_formats(data, value):
+    data["rain date"] = value
+    _, messages = build_messages(data, "Sector Confirmation")
+    assert "rain date Sunday, December 20, 2026" in messages[0].get_content()
+
+
+@pytest.mark.parametrize(
+    "value", [None, "", "not a date", "2026-12-19", "2026-12-21", "2025-12-20"]
+)
+def test_invalid_rain_date_exits_before_creating_drafts(
+    data, value, tmp_path, caplog
+):
+    data["rain date"] = value
+    (tmp_path / "routes.json").write_text(json.dumps(data), encoding="utf-8")
+    with (
+        patch(
+            "cho_cbc_management.generate_confirmation_emails.DATA_DIR", tmp_path
+        ),
+        patch.object(
+            sys,
+            "argv",
+            [
+                "drafts",
+                "--email",
+                "Route Confirmation",
+                "--routes",
+                "routes.json",
+            ],
+        ),
+        patch(
+            "cho_cbc_management.generate_confirmation_emails.create_drafts"
+        ) as create,
+        pytest.raises(SystemExit) as exit_info,
+    ):
+        main()
+    assert exit_info.value.code == 1
+    create.assert_not_called()
+    assert any(
+        record.levelname == "ERROR" and "Invalid rain date" in record.message
+        for record in caplog.records
+    )

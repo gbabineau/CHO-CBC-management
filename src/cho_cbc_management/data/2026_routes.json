@@ -2,6 +2,7 @@
     "description": "Charlottesville CBC Routes",
     "website": "https://cbc.audubon.org/en/join/circles/VACA",
     "count date": "December 19, 2026",
+    "rain date": "December 20, 2026",
     "compilers": [
         {
             "name": "Guy Babineau",
@@ -13,13 +14,25 @@
             "name": "Sector Confirmation",
             "to": "sector captains",
             "subject": "Charlottesville Christmas Bird Count Sector Captains",
-            "message": "As you may recall Jenny Gaden retired at the end of 2025 as compiler of the Charlottesville CBC year and I am the compiler starting in 2026. We will be doing the count on {date}.\nI am writing because I would like you to confirm that you are still willing to be a sector captain for the sector described below. This is different from being a route leader (which you are also). Your role as a sector captain is to help ensure that the routes and areas of your sector are covered. If for example, a route is going to be uncovered, you can help a new route leader take over. \nRoute descriptions for your sector are provided below.\n1. Please confirm you are still willing to be a sector captain.\n2. If you know of any updates to the routes in your sector, please let me know.\n3. I will also be emailing in the next few days all route leaders and copying you for routes in your sector so that you will know if they are no longer running the route."
+            "message": "As you may recall Jenny Gaden retired at the end of 2025 as compiler of the Charlottesville CBC year and I am the compiler starting in 2026. We will be doing the count on {date} with a rain date of {rain date}.\nI am writing because I would like you to confirm that you are still willing to be a sector captain for the sector described below. This is different from being a route leader (which you are also). Your role as a sector captain is to help ensure that the routes and areas of your sector are covered. If for example, a route is going to be uncovered, you can help a new route leader take over. \nRoute descriptions for your sector are provided below.\n1. Please confirm you are still willing to be a sector captain.\n2. If you know of any updates to the routes in your sector, please let me know.\n3. I will also be emailing in the next few days all route leaders and copying you for routes in your sector so that you will know if they are no longer running the route."
         },
         {
             "name": "Route Confirmation",
             "to": "route leaders",
             "subject": "Charlottesville Christmas Bird Count Route Leaders",
-            "message": "As you may recall Jenny Gaden retired at the end of 2025 as compiler of the Charlottesville CBC year and I am the compiler starting in 2026. We will be doing the count on {date}.\nI am writing because I would like you to confirm that you are still willing to be a route leader for the route described below. Your role as a route leader is to bird the route described with or without other participants. You are also responsible for coordinating with your Sector Captain(s) and Compiler if your route changes. You are also responsible for helping to find replacements if you cannot perform a route one year or wish to retire.\nProvided below are the route descriptions for which you are the leader.\n1. Please confirm you are still willing to be a route leader.\n2. If you know of any updates to the route in your sector, please your sector captains and the compiler know.\n3. I will be sending further communications including about the exciting new (optional) capabilities to submit your report electronically."
+            "message": "As you may recall Jenny Gaden retired at the end of 2025 as compiler of the Charlottesville CBC year and I am the compiler starting in 2026. We will be doing the count on {date} with a rain date of {rain date}.\nI am writing because I would like you to confirm that you are still willing to be a route leader for the route described below. Your role as a route leader is to bird the route described with or without other participants. You are also responsible for coordinating with your Sector Captain(s) and Compiler if your route changes. You are also responsible for helping to find replacements if you cannot perform a route one year or wish to retire.\nProvided below are the route descriptions for which you are the leader.\n1. Please confirm you are still willing to be a route leader.\n2. If you know of any updates to the route in your sector, please your sector captains and the compiler know.\n3. I will be sending further communications including about the exciting new (optional) capabilities to submit your report electronically."
+        },
+        {
+            "name": "Captain Announcement",
+            "to": "sector captains",
+            "subject": "Charlottesville Christmas Bird Count Sector Captains",
+            "message": "Dear Sector Captains,\n"
+        },
+        {
+            "name": "Participant Announcement",
+            "bcc": "everyone",
+            "subject": "Charlottesville Christmas Bird Count",
+            "message": "Dear Charlottesville CBC Participant,\n"
         }
     ],
     "sector captains": [
@@ -571,6 +584,12 @@
                 }
             ],
             "participants": []
+        }
+    ],
+    "additional participants": [
+        {
+            "name": "",
+            "email": ""
         }
     ]
 }

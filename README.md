@@ -29,10 +29,19 @@ uv run generate-confirmation-emails --email "Sector Confirmation" --routes 2026_
 
 Use `--email "Route Confirmation"` for route leaders. Each sector or route gets
 a draft addressed to all its captains or leaders, containing relevant route
-details. Route drafts copy the sector captains. No emails are sent. The script
+details. Route drafts copy the sector captains. `--email "Captain Announcement"`
+creates one draft to all captains; `--email "Participant Announcement"` creates
+one draft with all captains, route leaders, route participants, and additional
+participants in Bcc. Templates can specify `cc` and `bcc` as an email address,
+recipient group, or list of these. Supported groups are `sector captains`,
+`route leaders`, `route participants`, `additional participants`, and
+`everyone`. Addresses are deduplicated across To, Cc, and Bcc. No emails are
+sent. The script
 replaces `{date}` in the message with the JSON `count date`, formatted with its
 weekday. The date must be the last Saturday before Christmas Eve of the current
 year; common formats such as `2026-12-19` and `December 19, 2026` are accepted.
+It also replaces `{rain date}` with the JSON `rain date`, which must be the day
+after the count date.
 The script authenticates with `smtp.gmail.com:465` and saves drafts
 via `imap.gmail.com:993`; the account must allow both connections. Use
 `--compiler EMAIL` when there is more than one compiler, and `--env-file PATH`
