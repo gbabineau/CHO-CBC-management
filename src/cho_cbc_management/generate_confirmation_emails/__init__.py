@@ -18,7 +18,8 @@ from dotenv import dotenv_values
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 LOGGER = logging.getLogger(__name__)
-
+SECTOR_CAPTAINS_TEXT = "sector captains"
+ADDITIONAL_PARTICIPANTS_TEXT = "additional participants"
 
 def validated_count_date(data):
     year = date.today().year
@@ -37,7 +38,7 @@ def validated_count_date(data):
                 f"Count date must be the last Saturday before Christmas Eve in {year}: {expected.isoformat()}"
             )
     except (ValueError, OverflowError) as error:
-        LOGGER.error("Invalid count date %r: %s", raw_date, error)
+        LOGGER.exception("Invalid count date %r: %s", raw_date, error)
         raise ValueError(f"Invalid count date: {error}") from error
     return count_date
 
@@ -64,7 +65,7 @@ def validated_rain_date(data, count_date):
                 f"Rain date must be the day after the count date: {expected.isoformat()}"
             )
     except (ValueError, OverflowError) as error:
-        LOGGER.error("Invalid rain date %r: %s", raw_date, error)
+        LOGGER.exception("Invalid rain date %r: %s", raw_date, error)
         raise ValueError(f"Invalid rain date: {error}") from error
     return rain_date
 
@@ -207,7 +208,7 @@ def merge_audubon_participants(people, csv_people):
 def template_recipients(data, selection, label, everyone=None):
     captains = [
         person
-        for sector in data.get("sector captains", [])
+        for sector in data.get(SECTOR_CAPTAINS_TEXT, [])
         for person in sector.get("names", [])
     ]
     routes = data.get("routes", [])
@@ -217,12 +218,12 @@ def template_recipients(data, selection, label, everyone=None):
     participants = [
         person for route in routes for person in route.get("participants", [])
     ]
-    additional = data.get("additional participants", [])
+    additional = data.get(ADDITIONAL_PARTICIPANTS_TEXT, [])
     groups = {
-        "sector captains": captains,
+        SECTOR_CAPTAINS_TEXT: captains,
         "route leaders": leaders,
         "route participants": participants,
-        "additional participants": additional,
+        ADDITIONAL_PARTICIPANTS_TEXT: additional,
         "everyone": everyone
         if everyone is not None
         else captains + leaders + participants + additional,
@@ -269,7 +270,7 @@ def build_messages(
         json_people = (
             [
                 person
-                for sector in data.get("sector captains", [])
+                for sector in data.get(SECTOR_CAPTAINS_TEXT, [])
                 for person in sector.get("names", [])
             ]
             + [
@@ -278,7 +279,7 @@ def build_messages(
                 for field in ("leaders", "participants")
                 for person in route.get(field, [])
             ]
-            + data.get("additional participants", [])
+            + data.get(ADDITIONAL_PARTICIPANTS_TEXT, [])
         )
         everyone = merge_audubon_participants(
             json_people, load_audubon_participants(participants_csv)
@@ -302,7 +303,7 @@ def build_messages(
     compiler = compilers[0]
     sender = compiler["email"].strip()
     captains = {}
-    for captain in data.get("sector captains", []):
+    for captain in data.get(SECTOR_CAPTAINS_TEXT, []):
         captains.setdefault(captain["route"], []).extend(
             captain.get("names", [])
         )
@@ -324,7 +325,7 @@ def build_messages(
     if announcement:
         people = template_recipients(data, template.get("to"), "To", everyone)
         groups.append((people, [], None, []))
-    elif template.get("to") == "sector captains":
+    elif template.get("to") == SECTOR_CAPTAINS_TEXT:
         for sector in sorted(sectors):
             people = recipient_list(
                 captains.get(sector, []), f"Sector {sector} captain"

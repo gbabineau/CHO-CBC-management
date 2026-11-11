@@ -266,7 +266,8 @@ def test_announcements_group_recipients_and_preserve_bcc(data):
         captain["To"]
         == "captain@example.com, leader@example.com, second@example.com"
     )
-    assert captain["Cc"] is None and captain["Bcc"] is None
+    assert captain["Cc"] is None
+    assert captain["Bcc"] is None
     assert captain.get_content().startswith(
         "Dear Sector Captains,\n\nCount on Saturday, December 19, 2026"
     )
@@ -281,7 +282,8 @@ def test_announcements_group_recipients_and_preserve_bcc(data):
     draft = BytesParser(policy=policy.default).parsebytes(
         participant_messages[0].as_bytes(policy=policy.SMTP)
     )
-    assert draft["To"] is None and draft["Cc"] is None
+    assert draft["To"] is None
+    assert draft["Cc"] is None
     bcc = [
         address.casefold()
         for _, address in getaddresses(draft.get_all("Bcc", []))
