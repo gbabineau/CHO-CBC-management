@@ -1,0 +1,41 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Generate Route Description Document",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "cho_cbc_management.generate_route_description_document",
+            "args": ["--routes", "2026_routes.json"],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Generate Sector Confirmation Emails",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "cho_cbc_management.generate_confirmation_emails",
+            "args": ["--routes", "2026_routes.json", "--email", "Sector Confirmation"],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Generate Route Confirmation Emails",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "cho_cbc_management.generate_confirmation_emails",
+            "args": ["--routes", "2026_routes.json", "--email", "Route Confirmation"],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src"
+            },
+            "console": "integratedTerminal"
+        }
+    ]
+}
