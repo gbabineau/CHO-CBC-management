@@ -54,7 +54,7 @@
             "type": "debugpy",
             "request": "launch",
             "module": "cho_cbc_management.generate_confirmation_emails",
-            "args": ["--routes", "2026_routes.json", "--email", "Participant Announcement"],
+            "args": ["--routes", "2026_routes.json", "--email", "Participant Announcement", "--participants", "participants-2026-VACA.csv"],
             "cwd": "${workspaceFolder}",
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/src"
