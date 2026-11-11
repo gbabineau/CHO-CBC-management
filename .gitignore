@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# used by scripts
+reports/
+src/cho_cbc_management/data/participants-2026-VACA.csv
