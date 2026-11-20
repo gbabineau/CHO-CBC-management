@@ -3,10 +3,16 @@ name = "cho-cbc-management"
 version = "0.1.0"
 description = "Python scripts for CHO-CBC management"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "python-dateutil>=2.9,<3",
+    "python-dotenv>=1,<2",
+    "python-docx>=1.1.2,<2",
+]
 
 [project.scripts]
 cho-cbc-management = "cho_cbc_management:main"
+generate-route-description-document = "cho_cbc_management.generate_route_description_document:main"
+generate-confirmation-emails = "cho_cbc_management.generate_confirmation_emails:main"
 
 [build-system]
 requires = ["uv_build>=0.13.7,<0.14.0"]
