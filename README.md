@@ -92,3 +92,9 @@ SonarQube edition that supports it.
 For pull requests from forks, tests and builds still run, but the scan is
 skipped because repository secrets are unavailable. Dependabot checks Python
 dependencies and GitHub Actions weekly.
+
+## Other places to update
+
+Circle information including sector captain info is kept on the Audubon platform [https://cbc.audubon.org/manage/en/circles/VACA/01a0cde7-0bc5-7b4d-b756-88f21b3fd770]
+
+It is also on the PCBC website at [https://www.piedmontvirginiabirdclub.org/ccbc-sector-captains/]
