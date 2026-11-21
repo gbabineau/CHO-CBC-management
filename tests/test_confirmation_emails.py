@@ -704,14 +704,14 @@ def test_real_data_multi_sector_route_leader():
     leader = next(
         message
         for message in messages
-        if message.get_content().startswith("Dear Jim,")
+        if message.get_content().startswith("Dear Stauffer")
     )
     cc = {
         address.casefold()
         for _, address in getaddresses(leader.get_all("Cc", []))
     }
-    assert {"jimchildress5@gmail.com", "guy.babineau@gmail.com"} <= cc
-    assert "Route 2\nDescription:" in leader.get_content()
+    assert {"lsurdukowski@gmail.com", "guy.babineau@gmail.com"} <= cc
+    assert "Route 11\nDescription:" in leader.get_content()
     assert "Saturday, December 19, 2026" in leader.get_content()
     assert "Sunday, December 20, 2026" in leader.get_content()
     assert (
