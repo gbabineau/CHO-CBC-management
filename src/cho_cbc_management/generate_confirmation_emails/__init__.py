@@ -499,6 +499,24 @@ def format_route(route, captains):
     return "\n".join(lines)
 
 
+def attach_route_document(messages, document_path):
+    if not document_path.is_file():
+        raise ValueError(
+            f"Route description document not found: {document_path}; "
+            "generate it before creating participant announcement drafts"
+        )
+    document = document_path.read_bytes()
+    for message in messages:
+        message.add_attachment(
+            document,
+            maintype="application",
+            subtype=(
+                "vnd.openxmlformats-officedocument.wordprocessingml.document"
+            ),
+            filename=document_path.name,
+        )
+
+
 def create_drafts(sender, messages, env_path):
     if not env_path.is_file():
         raise ValueError(f"Environment file not found: {env_path}")
@@ -596,6 +614,13 @@ def main():
         if not messages:
             print("No recipients with email addresses; no drafts created.")
             return
+        if args.email == "Participant Announcement":
+            document_path = (
+                Path.cwd()
+                / "reports"
+                / f"{Path(args.routes).stem}.docx"
+            )
+            attach_route_document(messages, document_path)
         create_drafts(sender, messages, args.env_file)
     except (OSError, ValueError, KeyError, imaplib.IMAP4.error) as error:
         parser.exit(1, f"Error: {error}\n")

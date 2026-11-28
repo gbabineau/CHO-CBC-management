@@ -501,13 +501,19 @@ def test_incomplete_and_ambiguous_names_do_not_discard_csv_addresses(
     assert "Multiple JSON emails match Shared Person" in caplog.text
 
 
-def test_cli_participant_csv_parameter(data, tmp_path, caplog):
+def test_cli_participant_csv_parameter(
+    data, tmp_path, caplog, monkeypatch
+):
     data["additional participants"].append({"name": "New Person", "email": ""})
     (tmp_path / "routes.json").write_text(json.dumps(data), encoding="utf-8")
     (tmp_path / "participants.csv").write_text(
         "First Name,Last Name,Email\nNew,Person,new@example.com\n",
         encoding="utf-8",
     )
+    report_path = tmp_path / "reports" / "routes.docx"
+    report_path.parent.mkdir()
+    report_path.write_bytes(b"route description document")
+    monkeypatch.chdir(tmp_path)
     with (
         caplog.at_level(logging.INFO),
         patch(
@@ -533,7 +539,40 @@ def test_cli_participant_csv_parameter(data, tmp_path, caplog):
         main()
     draft = create.call_args.args[1][0]
     assert "new@example.com" in draft["Bcc"]
+    attachment = next(draft.iter_attachments())
+    assert attachment.get_filename() == "routes.docx"
+    assert attachment.get_content() == b"route description document"
     assert "Using Audubon CSV email for New Person" in caplog.text
+
+
+def test_cli_participant_announcement_requires_route_document(
+    data, tmp_path, monkeypatch
+):
+    (tmp_path / "routes.json").write_text(json.dumps(data), encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+    with (
+        patch(
+            "cho_cbc_management.generate_confirmation_emails.DATA_DIR", tmp_path
+        ),
+        patch.object(
+            sys,
+            "argv",
+            [
+                "drafts",
+                "--email",
+                "Participant Announcement",
+                "--routes",
+                "routes.json",
+            ],
+        ),
+        patch(
+            "cho_cbc_management.generate_confirmation_emails.create_drafts"
+        ) as create,
+        pytest.raises(SystemExit) as exit_info,
+    ):
+        main()
+    assert exit_info.value.code == 1
+    create.assert_not_called()
 
 
 def test_real_audubon_csv_prefers_json_address():
@@ -544,12 +583,19 @@ def test_real_audubon_csv_prefers_json_address():
     if not csv_path.is_file():
         pytest.skip("Audubon participant export is not present")
     with csv_path.open(encoding="utf-8-sig", newline="") as csv_file:
-        participant = next(
-            row
-            for row in csv.DictReader(csv_file)
-            if row["First Name"].casefold() == "allen"
-            and row["Last Name"].casefold() == "hale"
-        )
+        csv_participants = list(csv.DictReader(csv_file))
+    participant = next(
+        row
+        for row in csv_participants
+        if row["First Name"].casefold() == "allen"
+        and row["Last Name"].casefold() == "hale"
+    )
+    callan = next(
+        row
+        for row in csv_participants
+        if row["First Name"].casefold() == "callan"
+        and row["Last Name"].casefold() == "bentley"
+    )
     captain = next(
         person
         for sector in data["sector captains"]
@@ -565,6 +611,7 @@ def test_real_audubon_csv_prefers_json_address():
     }
     assert captain["email"].strip().casefold() in addresses
     assert participant["Email"].strip().casefold() not in addresses
+    assert callan["Email"].strip().casefold() not in addresses
 
 
 def test_real_announcement_recipients():
@@ -741,7 +788,7 @@ def test_missing_drafts_folder_does_not_append(data, tmp_path):
         mailbox.append.assert_not_called()
 
 
-def test_real_data_multi_sector_route_leader():
+def test_real_data_multi_sector_route_excludes_blocklisted_leader():
     data = json.loads(
         (DATA_DIR / "2026_routes.json").read_text(encoding="utf-8")
     )
@@ -750,8 +797,9 @@ def test_real_data_multi_sector_route_leader():
     leader = next(
         message
         for message in messages
-        if message.get_content().startswith("Dear Stauffer")
+        if message["To"] == "jengaden@gmail.com"
     )
+    assert "stauffer.miller203@comcast.net" not in leader["To"]
     cc = {
         address.casefold()
         for _, address in getaddresses(leader.get_all("Cc", []))

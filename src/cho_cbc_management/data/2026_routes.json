@@ -31,8 +31,8 @@
         {
             "name": "Participant Announcement",
             "bcc": "everyone",
-            "subject": "Charlottesville Christmas Bird Count",
-            "message": "Dear Charlottesville CBC Participant,\nWith Thanksgiving behind us, it's time to get ready for the 2026 Charlottesville Christmas Bird Count being held on {date} with an adverse weather date of {rain date}!\nYou are receiving this email because you have participated in this count in the past. I am the compiler for this year's count. I have already communicated with the sector captains and the route leaders and have confirmations from most of them. The information I have is collected in the attached document. You will see that there are open routes if you would like to lead one. There are also routes where captains have indicated a willingness to have other's join. There are so many ways to help!\n-If you would like to lead an open route, or see any opportunity for a new route, please request that of the sector captain and include me in the email.\n-If you would like to join a route that has a route leader, please contact the route leader.\n-If you would like to watch your bird feeder at home, and your house is in the circle(see link in the document), that is great! Just let me know.\nI hope we can find ways for everyone who wants to participate to participate. PVBC will also be holding a zoom meeting the night of the count which is optional but fun as people share highlights of their day. I will be sending more detailed instructions to route leaders on data submission including the ability (new for this circle) to send your data in via eBird trip report.\n\nPS. If you see errors in the attached document such as a missing or incorrectly described route you have been leading or joining which is not there, please let me know! If you are a sector captain or route leader and I have not recorded your confirmation, please let me know!\nPPS. If you would not like to receive an email from me on this topic, please let me know also (and sorry! the list was generated from what Audubon had from the past)."
+            "subject": "Charlottesville Christmas Bird Count -WITH ATTACHMENT",
+            "message": "With attachment this time!\nDear Charlottesville CBC Participant,\nWith Thanksgiving behind us, it's time to get ready for the 2026 Charlottesville Christmas Bird Count being held on {date} with an adverse weather date of {rain date}!\nYou are receiving this email because you have participated in this count in the past. I am the compiler for this year's count. I have already communicated with the sector captains and the route leaders and have confirmations from most of them. The information I have is collected in the attached document. You will see that there are open routes if you would like to lead one. There are also routes where captains have indicated a willingness to have other's join. There are so many ways to help!\n-If you would like to lead an open route, or see any opportunity for a new route, please request that of the sector captain and include me in the email.\n-If you would like to join a route that has a route leader, please contact the route leader.\n-If you would like to watch your bird feeder at home, and your house is in the circle(see link in the document), that is great! Just let me know.\nI hope we can find ways for everyone who wants to participate to participate. PVBC will also be holding a zoom meeting the night of the count which is optional but fun as people share highlights of their day. I will be sending more detailed instructions to route leaders on data submission including the ability (new for this circle) to send your data in via eBird trip report.\n\nPS. If you see errors in the attached document such as a missing or incorrectly described route you have been leading or joining which is not there, please let me know! If you are a sector captain or route leader and I have not recorded your confirmation, please let me know!\nPPS. If you would not like to receive an email from me on this topic, please let me know also (and sorry! the list was generated from what Audubon had from the past)."
         }
     ],
     "sector captains": [
@@ -608,15 +608,216 @@
     ],
     "additional participants": [
         {
+            "name": "Linn Harrison",
+            "email": "harrison.mb@gmail.com"
+        },
+        {
+            "name": "Callan Bently",
+            "email": "CBentley@pvcc.edu"
+        },
+        {
+            "name": "",
+            "email": ""
+        },
+        {
+            "name": "",
+            "email": ""
+        },
+        {
+            "name": "",
+            "email": ""
+        },
+        {
+            "name": "",
+            "email": ""
+        },
+        {
+            "name": "",
+            "email": ""
+        },
+        {
             "name": "",
             "email": ""
         },
         {
             "name": "JoAnn Dalley",
             "email": "joann.dalley@gmail.com"
+        },
+        {
+            "name": "",
+            "email": ""
         }
     ],
     "do not email": [
+        {
+            "name": "Callan Bently",
+            "email": "calanbently@gmail.com",
+            "notes": "Misspelled in audubon"
+        },
+        {
+            "name": "Callan Bentley",
+            "email": "calanbentley@gmail.com",
+            "notes": "Misspelled in Audubon CSV"
+        },
+        {
+            "name": "",
+            "email": "yellowbirdroad9@gmail.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "katehaneberry@gmail.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "codecrystal479@gmail.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "laxbirder@live.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "emstephens@comcast.net ",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "daltonjanet@comcast.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "bsmooney@earthlink.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "keg2a@virginia.edu",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "taj3435@comcast.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "clcq0@albemarle.org",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "gri4se@virginia.edu",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "bry3ey@virginia.edu",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "amoret@downerandassociates.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "larkspurart@comcast.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "jim-nix@comcast.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "omanu@embarqmail.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "stauffer.miller203@comcast.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "birdmangabriel@yahoo.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "dbeiker@firstva.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "kingston@lumos.net",
+            "notes": "deceased."
+        },
+        {
+            "name": "",
+            "email": "nobrien@lumos.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "joann.dally@gmail.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": " janetpaisley@comcast.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "kingston@cstone.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "nobrien@cstone.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": ""
+        },
         {
             "name": "Peter Brask",
             "email": "pbrask@yahoo.com",

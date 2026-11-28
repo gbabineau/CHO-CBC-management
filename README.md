@@ -47,6 +47,10 @@ For example:
 uv run generate-confirmation-emails --email "Participant Announcement" --routes 2026_routes.json --participants participants-2026-VACA.csv
 ```
 
+Generate the route description document first; participant announcement drafts
+attach `reports/2026_routes.docx` (using the selected routes filename) and will
+not be created if the document is missing.
+
 The export contains personal information and should be kept private.
 The CSV is used only for `everyone`. Matching full names use JSON addresses in
 preference to CSV addresses; a unique CSV address fills a missing JSON address
