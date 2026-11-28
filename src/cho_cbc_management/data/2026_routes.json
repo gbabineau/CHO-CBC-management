@@ -1,0 +1,832 @@
+{
+    "description": "Charlottesville CBC Routes",
+    "website": "https://cbc.audubon.org/en/join/circles/VACA",
+    "count date": "December 19, 2026",
+    "rain date": "December 20, 2026",
+    "compilers": [
+        {
+            "name": "Guy Babineau",
+            "email": "charlottesvillecbccompiler@gmail.com"
+        }
+    ],
+    "emails": [
+        {
+            "name": "Sector Confirmation",
+            "to": "sector captains",
+            "subject": "Charlottesville Christmas Bird Count Sector Captains",
+            "message": "Your confirmation reply requested!\nAs you may recall Jenny Gaden retired at the end of 2025 as compiler of the Charlottesville CBC year and I am the compiler starting in 2026. We will be doing the count on {date} with an adverse weather date of {rain date}.\nI am writing because I would like you to confirm that you are still willing to be a sector captain for the sector described below. This is different from being a route leader (which you are also). Your role as a sector captain is to help ensure that the routes and areas of your sector are covered. If for example, a route is going to be uncovered, you can help a new route leader take over. \nRoute descriptions for your sector are provided below.\n1. Please confirm you are still willing to be a sector captain.\n2. If you know of any updates to the routes in your sector, please let me know.\n3. I will also be emailing in the next few days all route leaders and copying you for routes in your sector so that you will know if they are no longer running the route."
+        },
+        {
+            "name": "Route Confirmation",
+            "to": "route leaders",
+            "subject": "Charlottesville Christmas Bird Count Route Leaders",
+            "message": "Your confirmation reply requested!\nAs you may recall Jenny Gaden retired at the end of 2025 as compiler of the Charlottesville CBC year and I am the compiler starting in 2026. We will be doing the count on {date} with an adverse weather date of {rain date}.\nI am writing because I would like you to confirm that you are still willing to be a route leader for the route described below. Your role as a route leader is to bird the route described with or without other participants and send me the data. You are also responsible for coordinating with your Sector Captain(s) and the Compiler (me) if your route changes. You are also responsible for helping to find replacements if you cannot perform a route one year or wish to retire.\nProvided below are the route descriptions for which you are the leader.\n1. Please confirm to me and your sector captain that you are still willing to be a route leader.\n2. If you know of any updates to the route in your sector, please your sector captains and me know.\n3. I will be sending further communications including about the exciting new (optional) capabilities to submit your report using eBird."
+        },
+        {
+            "name": "Captain Announcement",
+            "to": "sector captains",
+            "subject": "Charlottesville Christmas Bird Count Sector Captains",
+            "message": "Dear Sector Captains,\n"
+        },
+        {
+            "name": "Participant Announcement",
+            "bcc": "everyone",
+            "subject": "Charlottesville Christmas Bird Count -WITH ATTACHMENT",
+            "message": "With attachment this time!\nDear Charlottesville CBC Participant,\nWith Thanksgiving behind us, it's time to get ready for the 2026 Charlottesville Christmas Bird Count being held on {date} with an adverse weather date of {rain date}!\nYou are receiving this email because you have participated in this count in the past. I am the compiler for this year's count. I have already communicated with the sector captains and the route leaders and have confirmations from most of them. The information I have is collected in the attached document. You will see that there are open routes if you would like to lead one. There are also routes where captains have indicated a willingness to have other's join. There are so many ways to help!\n-If you would like to lead an open route, or see any opportunity for a new route, please request that of the sector captain and include me in the email.\n-If you would like to join a route that has a route leader, please contact the route leader.\n-If you would like to watch your bird feeder at home, and your house is in the circle(see link in the document), that is great! Just let me know.\nI hope we can find ways for everyone who wants to participate to participate. PVBC will also be holding a zoom meeting the night of the count which is optional but fun as people share highlights of their day. I will be sending more detailed instructions to route leaders on data submission including the ability (new for this circle) to send your data in via eBird trip report.\n\nPS. If you see errors in the attached document such as a missing or incorrectly described route you have been leading or joining which is not there, please let me know! If you are a sector captain or route leader and I have not recorded your confirmation, please let me know!\nPPS. If you would not like to receive an email from me on this topic, please let me know also (and sorry! the list was generated from what Audubon had from the past)."
+        }
+    ],
+    "sector captains": [
+        {
+            "sector": 1,
+            "names": [
+                {
+                    "name": "Allen Hale",
+                    "email": "allenmhale@gmail.com"
+                }
+            ]
+        },
+        {
+            "sector": 2,
+            "names": [
+                {
+                    "notes": "Confirmed for 2026",
+                    "name": "Tracey Hopper",
+                    "email": "traceyhopperesq@gmail.com"
+                }
+            ]
+        },
+        {
+            "sector": 3,
+            "names": [
+                {
+                    "name": "Will Kurtz",
+                    "email": "wkurtz94@gmail.com",
+                    "notes": "Confirmed for 2026"
+                }
+            ]
+        },
+        {
+            "sector": 4,
+            "names": [
+                {
+                    "name": "Gretchen Gehrett",
+                    "email": "gretchen@gehrett.com"
+                },
+                {
+                    "name": "John Rowlett",
+                    "email": "jlrowlett@gmail.com",
+                    "notes": "Confirmed for 2026"
+                }
+            ]
+        },
+        {
+            "sector": 5,
+            "names": [
+                {
+                    "name": "Jim Childress",
+                    "email": "jimchildress5@gmail.com",
+                    "notes": "Confirmed for 2026"
+                }
+            ]
+        },
+        {
+            "sector": 6,
+            "names": [
+                {
+                    "name": "Guy Babineau",
+                    "email": "guy.babineau@gmail.com",
+                    "notes": "Confirmed for 2026"
+                }
+            ]
+        },
+        {
+            "sector": 7,
+            "names": [
+                {
+                    "name": "Leigh Surdukowski",
+                    "email": "lsurdukowski@gmail.com",
+                    "notes": "Confirmed for 2026"
+                }
+            ]
+        },
+        {
+            "sector": 8,
+            "names": [
+                {
+                    "name": "Lou Tanner",
+                    "email": "lmtannerxiv@gmail.com",
+                    "notes": "Confirmed for 2026"
+                }
+            ]
+        }
+    ],
+    "routes": [
+        {
+            "number": 1,
+            "description": "I start at my house in Western Ridge subdivision just off Route 240, about 2 miles east of Crozet.  I walk down to the Lickinghole Creek flood control lake, and then proceed downstream (easterly) on Lickinghole Creek to its confluence with Mechums River at the railroad trestle at the 250/240 intersection.  From there I follow Mechums River downstream (northeasterly) to just past the outfall from Lake Albemarle, through the Summer’s farm (Knole), then up to Lake Albemarle Road to my aunt’s farm.",
+            "sectors": [
+                4
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation.",
+                    "name": " Cricket Barlow",
+                    "email": "gbarlow@TNC.ORG"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 2,
+            "description": "We start on the Moormans River about halfway between Millington and Rt. 810 and walk upstream for about 1 ½ miles, then turn north and walk through the fields at the foot of Pigeon Top Mountain back to our starting point.  We get back in our car and check the farm pond that is a couple miles north of Millington on the road to Free Union and then drive back to our house at the end of Blufton Mill Road.  From there we walk across Chapel Springs Farm to Wesley Chapel, check the ponds along the road there and circle back to our house.",
+            "sectors": [
+                5,
+                6
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation",
+                    "name": "Jim Childress",
+                    "email": "jimchildress5@gmail.com"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 3,
+            "description": "",
+            "notes": "We start birding at Beaver Creek Reservoir and in the surrounding woods and the farm fields below the dam.  Then continue up route 680 to the powerline which we bird on foot most of the way to the reservoir.  Back in the car we continue on route 680 to the intersection with route 811 which we cover, much of it on foot, along with adjacent fields, all the way to route 810.  Then along 810 to White Hall and on route 674 west to the edge of the circle.  Returning to White Hall we travel north on 810 a short distance, park and walk the fields and wet areas to the west of the road.  The scrubby wooded area to the east of the road in the old White Hall Gravel pits is no longer safe to walk during hunting season so we move on north along 810 to the edge of the circle stopping to walk around in the area surrounding the bridge over Doyle’s River.  The final leg is a return along route 680 from White Hall to Beaver Creek stopping at a few promising places along the way.",
+            "sectors": [
+                4
+            ],
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation.",
+                    "name": "Jim Nix",
+                    "email": "jim-nix@comcast.net"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 4,
+            "description": "I focus on Cold Spring Rd. and Bloomfield Rd/ which is off 250W 1.7 miles west of the Boar’s Head Inn",
+            "sectors": 3,
+            "notes": "GLB(11/2026) Open. Not done in recent years per Will Kurtz.",
+            "leaders": [],
+            "participants": []
+        },
+        {
+            "number": 5,
+            "description": "",
+            "notes": "I start my day near Red Hill as it is the closest point of the circle to Nelson County.  I would like to check the ponds NE of Red Hill on the east side of Norfolk Southern to start.  Some years these have been scoped by others, but that’s where I’ll begin unless I hear otherwise.  Then I drive out of the circle to re-enter on Route 706 (Dudley Mountain Road).  I spend the remainder of the morning on either side of Dudley Mountain and often climb to the top of Dudley Mountain.  I head to the polo field at Forest Lodge for lunch.  The afternoon is spent along Biscuit Run in an area.  ",
+            "sectors": [
+                1
+            ],
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation.",
+                    "name": "Allen Hale",
+                    "email": "allenmhale@gmail.com"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 6,
+            "description": "Bentivar, Beveldere, and Pen Park",
+            "sectors": [
+                7
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation.",
+                    "name": "David Hannah",
+                    "email": "dhannah.boone@gmail.com "
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 7,
+            "description": "The day starts at the Southfork of the Rivanna Dam on the side nearest the water treatment site. We walk a social trail along the eastern edge of the reservoir.  Next we go to Still Meadows and walk roughly a 2.0 mile loop. Then we travel to Dunlora and bird the fields and RTF trail near the Dunlora soccer field. Occasionally, with permission, we bird the private fields north of Dunlora. Depending on time and manpower, we may also bird the flood plain behind the pepsi place.",
+            "sectors": [
+                7
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation.",
+                    "name": "Leigh Surdukowski",
+                    "email": "lsurdukowski@gmail.com"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 8,
+            "name": "CBC territory north and west of Charlottesville Albemarle airport",
+            "description": "The following pair of roads make up the southern boundary of this territory.  Start at intersection of Markwood Road (rt. 664) and Buck Mt. Rd (rt. 665) just west of Chestnut Grove Baptist church.  Go west on Buck Mt. Road to Free Union.   From Free Union, go west on Wesley Chapel Rd. (rt. 609) until you come to route 668.  Along this southern boarder of the territory there are two roads that go north to the circle's northern boundary.  The first is rt. 667.  The farthest point north on this road is at the intersection of rt. 667 and rt. 776. The second is rt. 601.  The farthest point north on this road is the Piney River crossing.  Note – just prior to reaching the Piney River you will pass route 668 on your left, this will take you west toward Wesley Chapel Rd (see map).",
+            "sectors": [
+                6
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation.",
+                    "name": "Guy Babineau",
+                    "email": "guy.babineau@gmail.com"
+                },
+                {
+                    "comment": "",
+                    "name": "Susan Babineau",
+                    "email": "susan.r.babineau@gmail.com"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 9,
+            "description": "7:15 – 12:30 at yard areas on 3690 Country Lane, 12:30 - 5:15 pm walking on and around Rt. 708 (Dry Bridge Rd.) from Rt. 738 (Morgantown Rd.) up to and down Skyline Crest Drive.  Side roads include Country Woods Lane, Ivy Woods Lane, Layton Drive, Country Way and Country Lane.  The general area covered is from Murray Elementary School towards Peacock Hill subdivision.",
+            "sectors": [
+                4
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "Formerly Ron Kingston's route.",
+                    "name": "",
+                    "email": ""
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 9,
+            "description": "Blandemar Farms Pond and vicinity during the morning. Then check the streams and forest edges to the south and, for those able to climb the fence, hike the field and forest edges of Anchorage Farm.",
+            "sectors": [
+                2
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation.",
+                    "name": "Justin Cober-Lake",
+                    "email": "justin.coberlake@gmail.com"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 11,
+            "description": "Jenny Gaden and I visit Bentivar bottomland early and later confer with David Hannah, who visits Bentivar later in the day, to avoid duplicating birds. After that we walk the SOCA and MONU soccer fields along Polo Grounds Road, then cross Rt. 29 to Rio Mills Road, where we visit Brook Hill Park, the small wet area beneath the Berkmar Road bridge, then walk the overgrown path out to the base of the So. Rivanna Dam. Formerly we have birded the remainder of Rio Mills Road and areas west of the Kohl’s store but recently have not found these areas productive so have not done them. We next drive to the west side of the count circle to cover the Minor’s old route, a pie-shaped sector lying south of rt. 250 and north of Dick Woods Road, going as far west as the border of the count circle. We do not cover the Peacock Hill-Dry Bridge areas within this sector as they are done by route 9.",
+            "notes": "",
+            "sectors": [
+                7,
+                6,
+                4
+            ],
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation.",
+                    "name": "Stauffer Miller",
+                    "email": "stauffer.miller203@comcast.net"
+                },
+                {
+                    "comment": "Confirmed 2026 participation.",
+                    "name": "Jennifer Gaden",
+                    "email": "jengaden@gmail.com"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 12,
+            "name": "The John Warner Parkway CBC Route",
+            "description": "The route starts just off Rio Road , at the beginning of the paved walkers path. This is directly across the Parkway from the CATEC parking lot . It follows the paved path downhill until a bridge in about 20O yards is crossed and then goes off to the left and follows a wide and grassy cleared pipeline route for about 1/2 mile , that eventually comes back to the paved walking path. After that the paved path is followed all the way to the RT 250 bypass , after a crossing of Melbourne Road . There are some small ponds on the left as you get closer to Rt 250 , and native grasses around them that are worth checking out .",
+            "sectors": [
+                7
+            ],
+            "notes": "Open in 2026. Formerly run by John Holden. In 2025 run by Clay Henderson. Clay not able to participate in 2026.",
+            "leaders": [
+                {}
+            ],
+            "participants": []
+        },
+        {
+            "number": 13,
+            "description": "Float down the Moormans River from Reas Ford Rd to the bridge over the reservoir just below Ivy Creek.",
+            "sectors": [
+                6
+            ],
+            "notes": "Not done recently - open in 2026",
+            "leaders": [],
+            "participants": []
+        },
+        {
+            "number": 14,
+            "description": "This route starts at the bi-bridge convergence of Earlysville Rd. where it crosses the reservoir.  I continue up Earlysville Rd. (#743) stopping to bird at the Rivanna Rowing Center and Panorama Farm (and other side trips as warranted).  I follow 743 up into Earlysville and turn left (south?) on Reas Ford Rd. and bird “off” of that (Loftlands, Graemont East) down to the bridge that crosses the Rivanna.  I then back track and head up towards Free Union (and often finally get some English sparrows in the hedges across form Maupin’s Store) and terminate the count when I cross the river as I head back to C’ville.",
+            "sectors": [
+                6
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation",
+                    "name": "David White",
+                    "email": "dizookini@gmail.com"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 15,
+            "description": "start at the Moore's Creek wetlands off Franklin Street and went clockwise, going to Quarry Park, Azalea Park for a bit along that part of the trail to the bottom of Sunset (or Stribling), then part of Fontaine Research Park, Buckingham Circle, bit of O-Hill, around McCormick Road and Univ Cemetery, Dell, the North Grounds at UVA, then through part of Rivanna Trail behind English Inn, Rugby Road Extended and Oxford Road area.  A little park off there called Greenleaf,  then finished up at Washington Park late in the day.",
+            "sectors": [
+                8
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "name": "Lou Tanner",
+                    "email": "lmtannerxiv@gmail.com",
+                    "comment": "Confirmed 2026 participation. Lou is happy to have others join."
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 16,
+            "description": "a. the Lake Albemarle area beginning at Garth Rd. b. Ridge Rd between Garth Road and Free Union Road, and c. the relatively short distance along Millington Rd. between Garth Rd and the river d. Decca Lane",
+            "sectors": [
+                4,
+                5
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation.",
+                    "name": "Mark Adams",
+                    "email": "markadamsphd@yahoo.com"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 17,
+            "description": "Schenk’s Greenway, Maplewood Cemetery, Oakwood Cemetery, Meade Park, Riverview Cemetery, and Riverview Park from the southern end to Free Bridge.",
+            "sectors": [
+                8
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation.",
+                    "name": "Jon Rocket",
+                    "email": "jonsrockett@aol.com"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 18,
+            "description": "Young Birders Route - PVCC, Saunders ",
+            "notes": "We meet at PVCC and start by birding the campus and ponds, and then taking the trails to Monticello High School and the Lake.  Then we return to the cars and drive across 20 to the Saunders Monticello Trail Parking Lot.  From there, we hike the secluded farm trails on the West slopes of Carter’s Mountain and take the Saunders Monticello Trail to just before where it intersects with Mountaintop Farm Loop, where it leaves the circle.  Along the way we bird the Michie Tavern property, and the graveyard and neighborhood across the street.  We finish by birding the road Carter’s Mountain Trail until Carter Mountain Orchard, where it leaves the circle. ",
+            "sectors": [
+                1
+            ],
+            "leaders": [
+                {
+                    "comment": "Confirmed for 2026 - may just do Monticello lake area this year depending on appetite.",
+                    "name": "Louis Sokolow",
+                    "email": " louissokolow@gmail.com"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 19,
+            "description": "We will cover our neighborhood (Sherwood Farms), just 4 streets and we will travel all of them (Teel Ln, Overlook Dr., Mountain View Dr. and Chestnut Oak Ln), Then go over to Ivy Creek Natural Area.",
+            "sectors": [
+                1,
+                6
+            ],
+            "notes": "GLB(11/2026):Appears to conflict with route 24. I recommend just ICNA be removed from this route and coordinate ICNA visit (if desired) with route 24 participants.",
+            "leaders": [
+                {
+                    "comment": "",
+                    "name": "Teresa Culver",
+                    "email": "TerryCulver@embarqmail.com"
+                },
+                {
+                    "comment": "",
+                    "name": "Todd Culver",
+                    "email": ""
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 20,
+            "description": "Walk the entire property of Foxhaven Farm.",
+            "sectors": [
+                3
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026",
+                    "name": "Will Kurtz",
+                    "email": "wkurtz94@gmail.com"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 21,
+            "description": "We will start at Greenbriar Park from Brandywine Rd west to the RR tracks and back on the other side of the stream. We'll drive to Melbourne Rd and walk through the Botanical Garden to the JWP and the Dogwood memorial and loop around McIntire East, cross the skatepark bridge and do a loop around McIntire Park west covering the ballfields, YMCA  and stream from the CSH bridge to the tracks and the RTF back to our cars on Melborne Rd. If time permits I will cover Greenleaf Park and/or the YMCA to Fracker's Bridge and Grove Road. ",
+            "sectors": [
+                7
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "JoAnn is unable to do in 2026. Tyler will lead route in 2026 ",
+                    "name": "Tyler Demetriou",
+                    "email": "tyler.demetriou@gmail.com"
+                }
+            ],
+            "participants": [
+                {
+                    "name": "Kim Kozella",
+                    "email": "kckozella@gmail.com"
+                },
+                {
+                    "name": "Ani Allard",
+                    "email": "acqua21453@aol.com"
+                },
+                {
+                    "name": "Eve Gaige",
+                    "email": "egaige@gmail.com"
+                }
+            ]
+        },
+        {
+            "number": 22,
+            "name": "Darden Towe Park, Old Mills Trail, Pavillions",
+            "description": "Darden Towe: Route to generally follow the perimeter of the park, beginning at the parking lot near the cricket practice site.Old Mills Trail from the edge of Darden Towe Park along the Rivanna River, south and under Free Bridge for about 1 mile. Pavilions - Begin on Rolkin Rd W of the Rolkin/Verona traffic circle to Olympia Dr and the Ponds off Verona Ct, Rolkin Rd, and Olympia Dr. Then on gravel trails between the Pavilions and the Fontana neighborhoods E, then NW along the power line easement to the trail end near the Fontana Tennis/Swim Club.",
+            "sectors": [
+                7,
+                8
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "Confirmed for 2026",
+                    "name": "Penny Reighart",
+                    "email": "pennyreighart@gmail.com "
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 23,
+            "description": "Cannon Brook Way and vicinity; Broad Axe Rd – first 1.5 miles from Gillam’s Ridge Road; ponds along Three Notched Trace; Beaver Hill Lane pond; Cold Spring Road.",
+            "sectors": [
+                4
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "name": "Gretchen Gehrett",
+                    "email": "gretchen@gehrett.com",
+                    "comment": "Confirmed 2026 participation"
+                },
+                {
+                    "name": "John Rowlett",
+                    "email": "jlrowlett@gmail.com",
+                    "comment": "Confirmed 2026 participation"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 24,
+            "name": "Ivy Creek Natural Area",
+            "description": "At Ivy Creek we will walk the Red trail starting at the barn, including the Peninsula trail. Time permitting, we will add some of the Field trail and some of the trails accessible to the parking lot.",
+            "notes": "GLB(11/2026):Appears to conflict with route 19. Recommend keeping this (24) as only ICNA route.",
+            "sectors": [
+                6
+            ],
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation. Happy to have others join.",
+                    "name": "Myrlene Staton",
+                    "email": "masbear@outlook.com"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 25,
+            "description": "Formeryly Ruth Douglas's route. We survey Ruth’s yard at 108 Wild Flower Dr. We stop briefly at the two ponds within the Key West neighborhood, mainly looking for Hooded Mergansers, which we usually see, then down the driveway to the Key West Club. We survey the field to the left of the driveway, which ends at the Rivanna River, then park and start the rest of our route walking near the Rivanna River to Red Bud Creek, passing from the KWC property to private land owned by Rebecca Keese and Bob Gray, from whom we have permission to survey their property, then up White's Farm Rd. (driveway) and back to my house on Chestnut Ridge Rd. and Wild Flower Dr.",
+            "sectors": [
+                7
+            ],
+            "notes": "Open in 2026. Needs a leader. Needs to be modified.",
+            "leaders": [
+                {
+                    "comment": "",
+                    "name": "",
+                    "email": ""
+                }
+            ],
+            "participants": [
+                {
+                    "comment": "Does not wish to be leader",
+                    "name": "Sandy DiCarlo",
+                    "email": "sdicarlo1@outlook.com"
+                },
+                {
+                    "comment": "May wish to be leader",
+                    "name": "Caroline Bertrand",
+                    "email": "cbertrand35@gmail.com"
+                }
+            ]
+        },
+        {
+            "number": 26,
+            "description": "There is a loop that can start at the Park street bridge at the intersection with Melbourne Road. This loop crosses Holmes avenue and eventually crosses meadowbrook creek on a bridge and loops back towards park Street.",
+            "sectors": [
+                7
+            ],
+            "notes": "Open in 2026",
+            "leaders": [
+                {
+                    "comment": "",
+                    "name": "",
+                    "email": ""
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 27,
+            "description": "Sector 2 (northeast on Dick Woods Road from Pounding Creek Road, then down Taylor's Gap Road to Edge Valley Road). Mostly driving.",
+            "sectors": [
+                2
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation. Mary is willing take up to 3 others in her car - if others are challenged with lengthy walking.",
+                    "name": "Mary Hopkins",
+                    "email": "mary.t.hopkins3@gmail.com"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 28,
+            "description": "Browns Gap Turnpike and breakhart road north of Whitehall - take breakhart to sugar ridge road stop counting outside the circle, turn on sugar hollow road and start counting when inside the circle again and back to white hall. Some walking the roads, moving the car as needed.",
+            "sectors": [
+                5
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation.",
+                    "name": "Rob Trundle",
+                    "email": "robtrundle@gmail.com"
+                }
+            ],
+            "participants": []
+        }
+    ],
+    "additional participants": [
+        {
+            "name": "Linn Harrison",
+            "email": "harrison.mb@gmail.com"
+        },
+        {
+            "name": "Callan Bently",
+            "email": "CBentley@pvcc.edu"
+        },
+        {
+            "name": "",
+            "email": ""
+        },
+        {
+            "name": "",
+            "email": ""
+        },
+        {
+            "name": "",
+            "email": ""
+        },
+        {
+            "name": "",
+            "email": ""
+        },
+        {
+            "name": "",
+            "email": ""
+        },
+        {
+            "name": "",
+            "email": ""
+        },
+        {
+            "name": "JoAnn Dalley",
+            "email": "joann.dalley@gmail.com"
+        },
+        {
+            "name": "",
+            "email": ""
+        }
+    ],
+    "do not email": [
+        {
+            "name": "Callan Bently",
+            "email": "calanbently@gmail.com",
+            "notes": "Misspelled in audubon"
+        },
+        {
+            "name": "Callan Bentley",
+            "email": "calanbentley@gmail.com",
+            "notes": "Misspelled in Audubon CSV"
+        },
+        {
+            "name": "",
+            "email": "yellowbirdroad9@gmail.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "katehaneberry@gmail.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "codecrystal479@gmail.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "laxbirder@live.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "emstephens@comcast.net ",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "daltonjanet@comcast.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "bsmooney@earthlink.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "keg2a@virginia.edu",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "taj3435@comcast.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "clcq0@albemarle.org",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "gri4se@virginia.edu",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "bry3ey@virginia.edu",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "amoret@downerandassociates.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "larkspurart@comcast.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "jim-nix@comcast.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "omanu@embarqmail.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "stauffer.miller203@comcast.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "birdmangabriel@yahoo.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "dbeiker@firstva.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "kingston@lumos.net",
+            "notes": "deceased."
+        },
+        {
+            "name": "",
+            "email": "nobrien@lumos.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "joann.dally@gmail.com",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": " janetpaisley@comcast.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "kingston@cstone.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "nobrien@cstone.net",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": "",
+            "notes": "email invalid."
+        },
+        {
+            "name": "",
+            "email": ""
+        },
+        {
+            "name": "Peter Brask",
+            "email": "pbrask@yahoo.com",
+            "notes": "deceased."
+        },
+        {
+            "name": "Ruth Douglas",
+            "email": "cvilleruth@embarqmail.com",
+            "notes": "deceased."
+        }
+    ]
+}
