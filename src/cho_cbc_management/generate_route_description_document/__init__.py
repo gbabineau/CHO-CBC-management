@@ -52,7 +52,8 @@ def generate_document(data, output_path):
         hyperlink.append(link_run.element)
         paragraph._p.append(hyperlink)  # pylint: disable=protected-access
     captains = {
-        captain["route"]: captain for captain in data.get("sector captains", [])
+        captain["sector"]: captain
+        for captain in data.get("sector captains", [])
     }
     routes = data.get("routes", [])
     sector_numbers = set(captains)

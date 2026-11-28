@@ -36,7 +36,9 @@ participants in Bcc. Templates can specify `cc` and `bcc` as an email address,
 recipient group, or list of these. Supported groups are `sector captains`,
 `route leaders`, `route participants`, `additional participants`, and
 `everyone`. Addresses are deduplicated across To, Cc, and Bcc. No emails are
-sent. To include past participants from an Audubon CSV export, download it from
+sent. Addresses listed under `do not email` in the routes JSON are excluded
+from To, Cc, and Bcc, including addresses from an Audubon CSV export. To
+include past participants from an Audubon CSV export, download it from
 [Audubon circle management](https://cbc.audubon.org/manage/en/circles), place it
 in `src/cho_cbc_management/data`, and pass `--participants FILENAME.csv`.
 For example:

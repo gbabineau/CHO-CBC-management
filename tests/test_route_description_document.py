@@ -18,11 +18,11 @@ def test_report_sections_leaders_and_secondary_order(tmp_path):
         "website": "https://example.com/circle",
         "sector captains": [
             {
-                "route": 1,
+                "sector": 1,
                 "names": [{"name": "Captain", "email": "captain@example.com"}],
             },
-            {"route": 2, "names": [{"name": "", "email": ""}]},
-            {"route": 4, "names": [{"name": "Captain only", "email": ""}]},
+            {"sector": 2, "names": [{"name": "", "email": ""}]},
+            {"sector": 4, "names": [{"name": "Captain only", "email": ""}]},
         ],
         "routes": [
             {

@@ -32,12 +32,12 @@
             "name": "Participant Announcement",
             "bcc": "everyone",
             "subject": "Charlottesville Christmas Bird Count",
-            "message": "Dear Charlottesville CBC Participant,\n"
+            "message": "Dear Charlottesville CBC Participant,\nWith Thanksgiving behind us, it's time to get ready for the 2026 Charlottesville Christmas Bird Count being held on {date} with an adverse weather date of {rain date}!\nYou are receiving this email because you have participated in this count in the past. I am the compiler for this year's count. I have already communicated with the sector captains and the route leaders and have confirmations from most of them. The information I have is collected in the attached document. You will see that there are open routes if you would like to lead one. There are also routes where captains have indicated a willingness to have other's join. There are so many ways to help!\n-If you would like to lead an open route, or see any opportunity for a new route, please request that of the sector captain and include me in the email.\n-If you would like to join a route that has a route leader, please contact the route leader.\n-If you would like to watch your bird feeder at home, and your house is in the circle(see link in the document), that is great! Just let me know.\nI hope we can find ways for everyone who wants to participate to participate. PVBC will also be holding a zoom meeting the night of the count which is optional but fun as people share highlights of their day. I will be sending more detailed instructions to route leaders on data submission including the ability (new for this circle) to send your data in via eBird trip report.\n\nPS. If you see errors in the attached document such as a missing or incorrectly described route you have been leading or joining which is not there, please let me know! If you are a sector captain or route leader and I have not recorded your confirmation, please let me know!\nPPS. If you would not like to receive an email from me on this topic, please let me know also (and sorry! the list was generated from what Audubon had from the past)."
         }
     ],
     "sector captains": [
         {
-            "route": 1,
+            "sector": 1,
             "names": [
                 {
                     "name": "Allen Hale",
@@ -46,16 +46,17 @@
             ]
         },
         {
-            "route": 2,
+            "sector": 2,
             "names": [
                 {
-                    "name": "",
-                    "email": ""
+                    "notes": "Confirmed for 2026",
+                    "name": "Tracey Hopper",
+                    "email": "traceyhopperesq@gmail.com"
                 }
             ]
         },
         {
-            "route": 3,
+            "sector": 3,
             "names": [
                 {
                     "name": "Will Kurtz",
@@ -65,7 +66,7 @@
             ]
         },
         {
-            "route": 4,
+            "sector": 4,
             "names": [
                 {
                     "name": "Gretchen Gehrett",
@@ -79,7 +80,7 @@
             ]
         },
         {
-            "route": 5,
+            "sector": 5,
             "names": [
                 {
                     "name": "Jim Childress",
@@ -89,7 +90,7 @@
             ]
         },
         {
-            "route": 6,
+            "sector": 6,
             "names": [
                 {
                     "name": "Guy Babineau",
@@ -99,7 +100,7 @@
             ]
         },
         {
-            "route": 7,
+            "sector": 7,
             "names": [
                 {
                     "name": "Leigh Surdukowski",
@@ -109,7 +110,7 @@
             ]
         },
         {
-            "route": 8,
+            "sector": 8,
             "names": [
                 {
                     "name": "Lou Tanner",
@@ -129,7 +130,7 @@
             "notes": "",
             "leaders": [
                 {
-                    "comment": "",
+                    "comment": "Confirmed 2026 participation.",
                     "name": " Cricket Barlow",
                     "email": "gbarlow@TNC.ORG"
                 }
@@ -162,7 +163,7 @@
             ],
             "leaders": [
                 {
-                    "comment": "",
+                    "comment": "Confirmed 2026 participation.",
                     "name": "Jim Nix",
                     "email": "jim-nix@comcast.net"
                 }
@@ -186,7 +187,7 @@
             ],
             "leaders": [
                 {
-                    "comment": "",
+                    "comment": "Confirmed 2026 participation.",
                     "name": "Allen Hale",
                     "email": "allenmhale@gmail.com"
                 }
@@ -202,7 +203,7 @@
             "notes": "",
             "leaders": [
                 {
-                    "comment": "",
+                    "comment": "Confirmed 2026 participation.",
                     "name": "David Hannah",
                     "email": "dhannah.boone@gmail.com "
                 }
@@ -218,7 +219,7 @@
             "notes": "",
             "leaders": [
                 {
-                    "comment": "",
+                    "comment": "Confirmed 2026 participation.",
                     "name": "Leigh Surdukowski",
                     "email": "lsurdukowski@gmail.com"
                 }
@@ -235,7 +236,7 @@
             "notes": "",
             "leaders": [
                 {
-                    "comment": "",
+                    "comment": "Confirmed 2026 participation.",
                     "name": "Guy Babineau",
                     "email": "guy.babineau@gmail.com"
                 },
@@ -256,7 +257,7 @@
             "notes": "",
             "leaders": [
                 {
-                    "comment": "Formerly Ron Kingston's route. Deceased",
+                    "comment": "Formerly Ron Kingston's route.",
                     "name": "",
                     "email": ""
                 }
@@ -272,9 +273,9 @@
             "notes": "",
             "leaders": [
                 {
-                    "comment": "Had been led by Peter Mehring through 2025. pmehring2@gmail.com After 2025, Peter is willing to help whoever does take it over contact the farm owners for access.",
-                    "name": "",
-                    "email": ""
+                    "comment": "Confirmed 2026 participation.",
+                    "name": "Justin Cober-Lake",
+                    "email": "justin.coberlake@gmail.com"
                 }
             ],
             "participants": []
@@ -290,12 +291,12 @@
             ],
             "leaders": [
                 {
-                    "comment": "",
+                    "comment": "Confirmed 2026 participation.",
                     "name": "Stauffer Miller",
                     "email": "stauffer.miller203@comcast.net"
                 },
                 {
-                    "comment": "",
+                    "comment": "Confirmed 2026 participation.",
                     "name": "Jennifer Gaden",
                     "email": "jengaden@gmail.com"
                 }
@@ -309,7 +310,7 @@
             "sectors": [
                 7
             ],
-            "notes": "Formerly run by John Holden. In 2025 run by Clay Henderson. Clay not able to participate in 2026.",
+            "notes": "Open in 2026. Formerly run by John Holden. In 2025 run by Clay Henderson. Clay not able to participate in 2026.",
             "leaders": [
                 {}
             ],
@@ -321,7 +322,7 @@
             "sectors": [
                 6
             ],
-            "notes": "Not done recently - open",
+            "notes": "Not done recently - open in 2026",
             "leaders": [],
             "participants": []
         },
@@ -352,7 +353,7 @@
                 {
                     "name": "Lou Tanner",
                     "email": "lmtannerxiv@gmail.com",
-                    "comment": "Confirmed 2026 participation"
+                    "comment": "Confirmed 2026 participation. Lou is happy to have others join."
                 }
             ],
             "participants": []
@@ -383,7 +384,7 @@
             "notes": "",
             "leaders": [
                 {
-                    "comment": "Confirmed 2026",
+                    "comment": "Confirmed 2026 participation.",
                     "name": "Jon Rocket",
                     "email": "jonsrockett@aol.com"
                 }
@@ -399,7 +400,7 @@
             ],
             "leaders": [
                 {
-                    "comment": "",
+                    "comment": "Confirmed for 2026 - may just do Monticello lake area this year depending on appetite.",
                     "name": "Louis Sokolow",
                     "email": " louissokolow@gmail.com"
                 }
@@ -453,7 +454,7 @@
             "notes": "",
             "leaders": [
                 {
-                    "comment": "Note. JoAnn is unable to do in 2026. Tyler will do it in 2026 ",
+                    "comment": "JoAnn is unable to do in 2026. Tyler will lead route in 2026 ",
                     "name": "Tyler Demetriou",
                     "email": "tyler.demetriou@gmail.com"
                 }
@@ -502,7 +503,7 @@
                 {
                     "name": "Gretchen Gehrett",
                     "email": "gretchen@gehrett.com",
-                    "comment": ""
+                    "comment": "Confirmed 2026 participation"
                 },
                 {
                     "name": "John Rowlett",
@@ -522,7 +523,7 @@
             ],
             "leaders": [
                 {
-                    "comment": "",
+                    "comment": "Confirmed 2026 participation. Happy to have others join.",
                     "name": "Myrlene Staton",
                     "email": "masbear@outlook.com"
                 }
@@ -531,11 +532,11 @@
         },
         {
             "number": 25,
-            "description": "Requires update as Ruth sadly passed away in 2026. We survey Ruth’s yard at 108 Wild Flower Dr. We stop briefly at the two ponds within the Key West neighborhood, mainly looking for Hooded Mergansers, which we usually see, then down the driveway to the Key West Club. We survey the field to the left of the driveway, which ends at the Rivanna River, then park and start the rest of our route walking near the Rivanna River to Red Bud Creek, passing from the KWC property to private land owned by Rebecca Keese and Bob Gray, from whom we have permission to survey their property, then up White's Farm Rd. (driveway) and back to my house on Chestnut Ridge Rd. and Wild Flower Dr.",
+            "description": "Formeryly Ruth Douglas's route. We survey Ruth’s yard at 108 Wild Flower Dr. We stop briefly at the two ponds within the Key West neighborhood, mainly looking for Hooded Mergansers, which we usually see, then down the driveway to the Key West Club. We survey the field to the left of the driveway, which ends at the Rivanna River, then park and start the rest of our route walking near the Rivanna River to Red Bud Creek, passing from the KWC property to private land owned by Rebecca Keese and Bob Gray, from whom we have permission to survey their property, then up White's Farm Rd. (driveway) and back to my house on Chestnut Ridge Rd. and Wild Flower Dr.",
             "sectors": [
                 7
             ],
-            "notes": "",
+            "notes": "Open in 2026. Needs a leader. Needs to be modified.",
             "leaders": [
                 {
                     "comment": "",
@@ -559,8 +560,10 @@
         {
             "number": 26,
             "description": "There is a loop that can start at the Park street bridge at the intersection with Melbourne Road. This loop crosses Holmes avenue and eventually crosses meadowbrook creek on a bridge and loops back towards park Street.",
-            "sectors": 7,
-            "notes": "",
+            "sectors": [
+                7
+            ],
+            "notes": "Open in 2026",
             "leaders": [
                 {
                     "comment": "",
@@ -573,13 +576,31 @@
         {
             "number": 27,
             "description": "Sector 2 (northeast on Dick Woods Road from Pounding Creek Road, then down Taylor's Gap Road to Edge Valley Road). Mostly driving.",
-            "sectors": 7,
+            "sectors": [
+                2
+            ],
             "notes": "",
             "leaders": [
                 {
-                    "comment": "Mary is willing take up to 3 others in my car - if others str challenged with lengthy walking.",
+                    "comment": "Confirmed 2026 participation. Mary is willing take up to 3 others in her car - if others are challenged with lengthy walking.",
                     "name": "Mary Hopkins",
                     "email": "mary.t.hopkins3@gmail.com"
+                }
+            ],
+            "participants": []
+        },
+        {
+            "number": 28,
+            "description": "Browns Gap Turnpike and breakhart road north of Whitehall - take breakhart to sugar ridge road stop counting outside the circle, turn on sugar hollow road and start counting when inside the circle again and back to white hall. Some walking the roads, moving the car as needed.",
+            "sectors": [
+                5
+            ],
+            "notes": "",
+            "leaders": [
+                {
+                    "comment": "Confirmed 2026 participation.",
+                    "name": "Rob Trundle",
+                    "email": "robtrundle@gmail.com"
                 }
             ],
             "participants": []
@@ -593,6 +614,18 @@
         {
             "name": "JoAnn Dalley",
             "email": "joann.dalley@gmail.com"
+        }
+    ],
+    "do not email": [
+        {
+            "name": "Peter Brask",
+            "email": "pbrask@yahoo.com",
+            "notes": "deceased."
+        },
+        {
+            "name": "Ruth Douglas",
+            "email": "cvilleruth@embarqmail.com",
+            "notes": "deceased."
         }
     ]
 }

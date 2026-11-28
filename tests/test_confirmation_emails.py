@@ -64,20 +64,20 @@ def sample_data():
         ],
         "sector captains": [
             {
-                "route": 1,
+                "sector": 1,
                 "names": [
                     {"name": "Captain One", "email": " captain@example.com "},
                     {"name": "Leader One", "email": "leader@example.com"},
                 ],
             },
             {
-                "route": 2,
+                "sector": 2,
                 "names": [
                     {"name": "Captain One", "email": "CAPTAIN@example.com"},
                     {"name": "Captain Two", "email": "second@example.com"},
                 ],
             },
-            {"route": 3, "names": [{"email": ""}]},
+            {"sector": 3, "names": [{"email": ""}]},
         ],
         "routes": [
             {
@@ -301,6 +301,44 @@ def test_announcements_group_recipients_and_preserve_bcc(data):
         "Dear Participants,\n\nRain date Sunday, December 20, 2026"
     )
     assert body.strip().endswith("Sincerely,\nCompiler\ncompiler@example.com")
+
+
+def test_do_not_email_excludes_recipients_from_every_channel(data, tmp_path):
+    excluded_emails = {
+        "leader@example.com",
+        "extra@example.com",
+        "csv-only@example.com",
+    }
+    data["do not email"] = [
+        {"email": " LEADER@example.com "},
+        {"email": "Extra@example.com"},
+        {"email": "CSV-only@example.com"},
+    ]
+    data["emails"][1]["cc"] = "LEADER@example.com"
+    data["emails"][1]["bcc"] = " EXTRA@example.com "
+    csv_path = tmp_path / "participants.csv"
+    csv_path.write_text(
+        "First Name,Last Name,Email\nCSV,Only,csv-only@example.com\n",
+        encoding="utf-8",
+    )
+
+    _, route_messages = build_messages(data, "Route Confirmation")
+    _, captain_messages = build_messages(data, "Captain Announcement")
+    _, participant_messages = build_messages(
+        data, "Participant Announcement", participants_csv=csv_path
+    )
+    messages = route_messages + captain_messages + participant_messages
+    recipients = {
+        address.casefold()
+        for message in messages
+        for field in ("To", "Cc", "Bcc")
+        for _, address in getaddresses(message.get_all(field, []))
+    }
+
+    assert excluded_emails.isdisjoint(recipients)
+    assert route_messages
+    assert captain_messages
+    assert participant_messages
 
 
 def test_cc_and_bcc_are_supported_on_confirmations(data):
@@ -552,6 +590,12 @@ def test_real_announcement_recipients():
         for person in everyone
         if person.get("email", "").strip()
     }
+    excluded_emails = {
+        person["email"].strip().casefold()
+        for person in data.get("do not email", [])
+        if person.get("email", "").strip()
+    }
+    expected -= excluded_emails
     _, captain_messages = build_messages(data, "Captain Announcement")
     assert len(captain_messages) == 1
     actual_captains = {
@@ -562,7 +606,8 @@ def test_real_announcement_recipients():
         person["email"].strip().casefold()
         for person in captains
         if person.get("email", "").strip()
-    }
+    } - excluded_emails
+    assert excluded_emails.isdisjoint(actual_captains)
     _, participant_messages = build_messages(data, "Participant Announcement")
     assert len(participant_messages) == 1
     bcc = [
@@ -573,6 +618,7 @@ def test_real_announcement_recipients():
     ]
     assert set(bcc) == expected
     assert len(bcc) == len(expected)
+    assert excluded_emails.isdisjoint(bcc)
     assert participant_messages[0]["To"] is None
 
 

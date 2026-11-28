@@ -20,6 +20,7 @@ DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 LOGGER = logging.getLogger(__name__)
 SECTOR_CAPTAINS_TEXT = "sector captains"
 ADDITIONAL_PARTICIPANTS_TEXT = "additional participants"
+DO_NOT_EMAIL_TEXT = "do not email"
 
 def validated_count_date(data):
     year = date.today().year
@@ -94,14 +95,14 @@ def contact_list(people):
     return ", ".join(contacts) or "Open"
 
 
-def recipient_list(people, label):
+def recipient_list(people, label, excluded_emails=()):
     recipients = {}
     for person in people:
         name = contact_name(person)
         email = person.get("email", "").strip()
         if name and not email:
             LOGGER.warning("%s %s has no email address", label, name)
-        if email:
+        if email and email.casefold() not in excluded_emails:
             recipients.setdefault(email.casefold(), person)
     return list(recipients.values())
 
@@ -205,7 +206,9 @@ def merge_audubon_participants(people, csv_people):
     return merged
 
 
-def template_recipients(data, selection, label, everyone=None):
+def template_recipients(
+    data, selection, label, everyone=None, excluded_emails=()
+):
     captains = [
         person
         for sector in data.get(SECTOR_CAPTAINS_TEXT, [])
@@ -241,7 +244,7 @@ def template_recipients(data, selection, label, everyone=None):
             people.append({"email": item.strip()})
         else:
             raise ValueError(f"Unsupported {label} recipient: {item!r}")
-    return recipient_list(people, label)
+    return recipient_list(people, label, excluded_emails)
 
 
 def build_messages(
@@ -259,6 +262,11 @@ def build_messages(
             f"Expected exactly one email template named {template_name!r}"
         )
     template = templates[0]
+    excluded_emails = {
+        person.get("email", "").strip().casefold()
+        for person in data.get(DO_NOT_EMAIL_TEXT, [])
+        if person.get("email", "").strip()
+    }
     selections = [template.get(field) for field in ("to", "cc", "bcc")]
     uses_everyone = any(
         isinstance(item, str) and item.strip().casefold() == "everyone"
@@ -304,7 +312,7 @@ def build_messages(
     sender = compiler["email"].strip()
     captains = {}
     for captain in data.get(SECTOR_CAPTAINS_TEXT, []):
-        captains.setdefault(captain["route"], []).extend(
+        captains.setdefault(captain["sector"], []).extend(
             captain.get("names", [])
         )
     routes = data.get("routes", [])
@@ -323,12 +331,20 @@ def build_messages(
         "Participant Announcement",
     )
     if announcement:
-        people = template_recipients(data, template.get("to"), "To", everyone)
+        people = template_recipients(
+            data,
+            template.get("to"),
+            "To",
+            everyone,
+            excluded_emails,
+        )
         groups.append((people, [], None, []))
     elif template.get("to") == SECTOR_CAPTAINS_TEXT:
         for sector in sorted(sectors):
             people = recipient_list(
-                captains.get(sector, []), f"Sector {sector} captain"
+                captains.get(sector, []),
+                f"Sector {sector} captain",
+                excluded_emails,
             )
             sector_routes = [
                 route for route in routes if sector in route_sectors(route)
@@ -343,7 +359,9 @@ def build_messages(
     elif template.get("to") == "route leaders":
         for route in routes:
             people = recipient_list(
-                route.get("leaders", []), f"Route {route['number']} leader"
+                route.get("leaders", []),
+                f"Route {route['number']} leader",
+                excluded_emails,
             )
             if people:
                 route_captains = [
@@ -352,7 +370,9 @@ def build_messages(
                     for person in captains.get(sector, [])
                 ]
                 copies = recipient_list(
-                    route_captains, f"Route {route['number']} captain"
+                    route_captains,
+                    f"Route {route['number']} captain",
+                    excluded_emails,
                 )
                 groups.append((people, copies, None, [route]))
     else:
@@ -360,9 +380,11 @@ def build_messages(
             f"Unsupported template recipient group: {template.get('to')!r}"
         )
 
-    template_cc = template_recipients(data, template.get("cc"), "Cc", everyone)
+    template_cc = template_recipients(
+        data, template.get("cc"), "Cc", everyone, excluded_emails
+    )
     template_bcc = template_recipients(
-        data, template.get("bcc"), "Bcc", everyone
+        data, template.get("bcc"), "Bcc", everyone, excluded_emails
     )
     messages = []
     for people, copies, sector, group_routes in groups:
